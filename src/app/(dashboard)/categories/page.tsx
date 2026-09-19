@@ -855,6 +855,7 @@ import { CategoriesPageContent } from '@/components/categories/CategoriesPageCon
 // }
 
 export default function CategoriesPage() {
+  
   return (
     <Suspense fallback={<div className="p-6 text-sm text-text-light">Loading Categories...</div>}>
       <CategoriesPageContent />

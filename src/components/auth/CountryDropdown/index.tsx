@@ -5,9 +5,9 @@ import CountrySearch from './CountrySearch';
 import DropdownButton from './DropdownButton';
 import { useCountryDropdown } from './useCountryDropdown';
 
+import type { ListDistinctCountries } from '@/types';
 import QueryBoundary from '@/components/query/QueryBoundary';
 import { useCountries } from '@/features/country/api/queries';
-import { ListDistinctCountries } from '@/types';
 
 export interface CountryDropdownProps {
   isActive?: boolean;
