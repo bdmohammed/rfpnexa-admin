@@ -1,26 +1,27 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { authApi } from "./api";
-import { authQueryKeys } from "./keys";
+import { authApi } from './api';
+import { authQueryKeys } from './keys';
 
-import {
-  ForgotPasswordDto,
-  LoginDto,
-  RegisterDto,
-  ResetPasswordDto,
-  DisableTotpInput,
-  EmailChangeInput,
-  OAuthCallbackInput,
-  VerifyEmailChangeInput,
-  UpdateUserDetailInput,
-  SubmitApprovalInput,
-  ReviewApprovalInput,
-  ImpersonateUserInput,
+import type {
   AssignUserRolesInput,
   CreateAdminInput,
+  DisableTotpInput,
+  EmailChangeInput,
+  ForgotPasswordDto,
+  ImpersonateUserInput,
+  LoginDto,
+  OAuthCallbackInput,
+  RegisterDto,
+  ResetPasswordDto,
+  ReviewApprovalInput,
   SetupInput,
-} from "../types";
-import { AppError, ErrorCode } from "@/lib/errors";
+  SubmitApprovalInput,
+  UpdateUserDetailInput,
+  VerifyEmailChangeInput,
+} from '../types';
+import type { ErrorCode } from '@/lib/errors';
+import { AppError } from '@/lib/errors';
 
 /**
  * Login
@@ -32,7 +33,7 @@ export function useLogin() {
     mutationFn: (dto: LoginDto) => authApi.login(dto),
 
     onSuccess: async (response) => {
-      queryClient.setQueryData(["auth", "me"], response.data);
+      queryClient.setQueryData(['auth', 'me'], response.data);
 
       await queryClient.invalidateQueries({
         queryKey: authQueryKeys.me(),
@@ -169,8 +170,7 @@ export function useRevokeAllSessions() {
  */
 export function useRequestEmailChange() {
   return useMutation({
-    mutationFn: (dto: EmailChangeInput) =>
-      authApi.requestEmailChange(dto.email),
+    mutationFn: (dto: EmailChangeInput) => authApi.requestEmailChange(dto.email),
   });
 }
 
@@ -179,8 +179,7 @@ export function useRequestEmailChange() {
  */
 export function useVerifyEmailChange() {
   return useMutation({
-    mutationFn: (dto: VerifyEmailChangeInput) =>
-      authApi.verifyEmailChange(dto.token),
+    mutationFn: (dto: VerifyEmailChangeInput) => authApi.verifyEmailChange(dto.token),
   });
 }
 
@@ -209,15 +208,10 @@ export function useOAuthCallback() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
-      provider,
-      query,
-    }: {
-      provider: string;
-      query: OAuthCallbackInput;
-    }) => authApi.oauthCallback(provider, query),
+    mutationFn: ({ provider, query }: { provider: string; query: OAuthCallbackInput }) =>
+      authApi.oauthCallback(provider, query),
     onSuccess: async (response) => {
-      queryClient.setQueryData(["auth", "me"], response.data);
+      queryClient.setQueryData(['auth', 'me'], response.data);
 
       await queryClient.invalidateQueries({
         queryKey: authQueryKeys.me(),
@@ -237,13 +231,7 @@ export function useBlockUser() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      id,
-      isBlocked,
-    }: {
-      id: string;
-      isBlocked: boolean;
-    }) => {
+    mutationFn: async ({ id, isBlocked }: { id: string; isBlocked: boolean }) => {
       const { data } = await authApi.blockUser(id, { isBlocked });
       if (!data.success) {
         throw new AppError(data.message, 400, data.error as ErrorCode);
@@ -316,13 +304,7 @@ export function useUpdateUserDetail() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      id,
-      input,
-    }: {
-      id: string;
-      input: UpdateUserDetailInput;
-    }) => {
+    mutationFn: async ({ id, input }: { id: string; input: UpdateUserDetailInput }) => {
       const { data } = await authApi.updateUserDetail(id, input);
       if (!data.success) {
         throw new AppError(data.message, 400, data.error as ErrorCode);
@@ -447,13 +429,7 @@ export function useRevokeUserSession() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      id,
-      sessionId,
-    }: {
-      id: string;
-      sessionId: string;
-    }) => {
+    mutationFn: async ({ id, sessionId }: { id: string; sessionId: string }) => {
       const { data } = await authApi.revokeUserSession(id, sessionId);
       if (!data.success) {
         throw new AppError(data.message, 400, data.error as ErrorCode);
@@ -548,13 +524,7 @@ export function useSubmitApproval() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      id,
-      input,
-    }: {
-      id: string;
-      input: SubmitApprovalInput;
-    }) => {
+    mutationFn: async ({ id, input }: { id: string; input: SubmitApprovalInput }) => {
       const { data } = await authApi.submitApproval(id, input);
       if (!data.success) {
         throw new AppError(data.message, 400, data.error as ErrorCode);
@@ -563,7 +533,7 @@ export function useSubmitApproval() {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["approval-request", variables.id],
+        queryKey: ['approval-request', variables.id],
       });
       queryClient.invalidateQueries({ queryKey: authQueryKeys.users() });
       queryClient.invalidateQueries({
@@ -580,13 +550,7 @@ export function useReviewApproval() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      id,
-      input,
-    }: {
-      id: string;
-      input: ReviewApprovalInput;
-    }) => {
+    mutationFn: async ({ id, input }: { id: string; input: ReviewApprovalInput }) => {
       const { data } = await authApi.reviewApproval(id, input);
       if (!data.success) {
         throw new AppError(data.message, 400, data.error as ErrorCode);
@@ -595,7 +559,7 @@ export function useReviewApproval() {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["approval-request", variables.id],
+        queryKey: ['approval-request', variables.id],
       });
       queryClient.invalidateQueries({ queryKey: authQueryKeys.users() });
       queryClient.invalidateQueries({
@@ -610,13 +574,7 @@ export function useReviewApproval() {
  */
 export function useImpersonateUser() {
   return useMutation({
-    mutationFn: async ({
-      id,
-      input,
-    }: {
-      id: string;
-      input: ImpersonateUserInput;
-    }) => {
+    mutationFn: async ({ id, input }: { id: string; input: ImpersonateUserInput }) => {
       const { data } = await authApi.impersonateUser(id, input);
       if (!data.success) {
         throw new AppError(data.message, 400, data.error as ErrorCode);
@@ -633,13 +591,7 @@ export function useAssignUserRoles() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      id,
-      input,
-    }: {
-      id: string;
-      input: AssignUserRolesInput;
-    }) => {
+    mutationFn: async ({ id, input }: { id: string; input: AssignUserRolesInput }) => {
       const { data } = await authApi.assignUserRoles(id, input);
       if (!data.success) {
         throw new AppError(data.message, 400, data.error as ErrorCode);

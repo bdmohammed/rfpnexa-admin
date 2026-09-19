@@ -31,7 +31,13 @@ export function SkeletonGrid({
   );
 }
 
-export function SkeletonList({ count = 5, heightClass = 'h-16' }: { count?: number; heightClass?: string }) {
+export function SkeletonList({
+  count = 5,
+  heightClass = 'h-16',
+}: {
+  count?: number;
+  heightClass?: string;
+}) {
   return (
     <div className="space-y-4">
       {Array.from({ length: count }).map((_, i) => (

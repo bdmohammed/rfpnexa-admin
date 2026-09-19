@@ -1,7 +1,9 @@
 // src/components/error-boundary/ErrorBoundary.tsx
 'use client';
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { Component } from 'react';
+
+import type { ErrorInfo, ReactNode } from 'react';
 import { handleClientError } from '@/lib/errors/utils';
 
 export interface ErrorBoundaryProps {
@@ -33,8 +35,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Log client-side error to logger/telemetry
+    //@ts-ignore
     handleClientError(error, {
       component: 'ErrorBoundary',
       componentStack: errorInfo.componentStack || undefined,
@@ -65,14 +68,17 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     });
   };
 
-  render(): ReactNode {
+  override render(): ReactNode {
     const { hasError, error } = this.state;
     const { fallback, children } = this.props;
 
     if (hasError && error) {
       if (fallback) {
         if (typeof fallback === 'function') {
-          const FallbackComponent = fallback as React.ComponentType<{ error: Error; reset: () => void }>;
+          const FallbackComponent = fallback as React.ComponentType<{
+            error: Error;
+            reset: () => void;
+          }>;
           return <FallbackComponent error={error} reset={this.reset} />;
         }
         return fallback;

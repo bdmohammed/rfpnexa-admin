@@ -1,55 +1,62 @@
-import { apiClient } from "@/lib/http";
-
-import type { ApiResponse, Tender, PaginatedMeta } from "@/types";
-
 import type {
-  TenderDownloadResponse,
-  TenderDetailsResponse,
-  TenderQueryDto,
-  TenderSearchQueryDto,
+  AnswerQuestionDto,
+  AssignReviewerDto,
+  CreateAmendmentDto,
+  CreateClarificationDto,
+  CreateQuestionDto,
+  // CreateTender,
   CreateTenderDto,
+  RegisterDocumentDto,
+  SubmitEvaluationDto,
+  SubmitReviewCommentDto,
+  TenderCommitteeDto,
+  TenderDetailsResponse,
+  TenderDiffResponse,
+  TenderDownloadResponse,
+  TenderHistoryLog,
+  TenderInvitationDto,
+  TenderQueryDto,
+  TenderReport,
+  TenderSearchQueryDto,
+  TenderTemplateDto,
+  TenderWatcherDto,
   UpdateTenderDto,
   UpdateTenderStatusDto,
   UploadUrlDto,
   UploadUrlResponse,
-  RegisterDocumentDto,
-  CreateQuestionDto,
-  AnswerQuestionDto,
-  CreateClarificationDto,
-  CreateAmendmentDto,
-  AssignReviewerDto,
-  SubmitReviewCommentDto,
-  TenderCommitteeDto,
-  SubmitEvaluationDto,
-  TenderWatcherDto,
-  TenderInvitationDto,
-  TenderTemplateDto,
-  TenderHistoryLog,
-  TenderDiffResponse,
-  TenderReport,
-} from "../types";
+} from '../types';
+import type { ApiResponse, PaginatedMeta, Tender } from '@/types';
+import { apiClient } from '@/lib/http';
 
 export const tenderApi = {
   list(query?: TenderQueryDto) {
-    return apiClient.get<ApiResponse<Tender[]>>("/tenders", {
+    return apiClient.get<ApiResponse<Tender[]>>('/tenders', {
       params: query,
     });
   },
 
+  getTenderById(id: string) {
+    return apiClient.get<ApiResponse<Tender[]>>(`/tenders/${id}`);
+  },
+
+  createTender(body: FormData) {
+    return apiClient.post<ApiResponse<any>>('/tenders', body);
+  },
+
+  updateTender(id: string, body: FormData) {
+    return apiClient.put<ApiResponse<Tender[]>>(`/tenders/${id}`, body);
+  },
+
   getBySlug(slug: string) {
-    return apiClient.get<ApiResponse<TenderDetailsResponse>>(
-      `/tenders/${slug}`,
-    );
+    return apiClient.get<ApiResponse<TenderDetailsResponse>>(`/tenders/${slug}`);
   },
 
   getDownloadUrl(id: string) {
-    return apiClient.get<ApiResponse<TenderDownloadResponse>>(
-      `/tenders/${id}/download-url`,
-    );
+    return apiClient.get<ApiResponse<TenderDownloadResponse>>(`/tenders/${id}/download-url`);
   },
 
   getStatistics() {
-    return apiClient.get<ApiResponse<any>>("/tenders/statistics");
+    return apiClient.get<ApiResponse<any>>('/tenders/statistics');
   },
 
   postQuestion(id: string, input: CreateQuestionDto) {
@@ -61,17 +68,11 @@ export const tenderApi = {
   },
 
   adminGetUploadUrl(input: UploadUrlDto) {
-    return apiClient.post<ApiResponse<UploadUrlResponse>>(
-      "/tenders/admin/upload-url",
-      input,
-    );
+    return apiClient.post<ApiResponse<UploadUrlResponse>>('/tenders/admin/upload-url', input);
   },
 
   adminRegisterDocument(id: string, input: RegisterDocumentDto) {
-    return apiClient.post<ApiResponse<any>>(
-      `/tenders/admin/${id}/documents`,
-      input,
-    );
+    return apiClient.post<ApiResponse<any>>(`/tenders/admin/${id}/documents`, input);
   },
 
   adminGetDocuments(id: string) {
@@ -79,22 +80,17 @@ export const tenderApi = {
   },
 
   adminDeleteDocument(docId: string) {
-    return apiClient.delete<ApiResponse<any>>(
-      `/tenders/admin/documents/${docId}`,
-    );
+    return apiClient.delete<ApiResponse<any>>(`/tenders/admin/documents/${docId}`);
   },
 
   adminList(query?: TenderSearchQueryDto) {
-    return apiClient.get<ApiResponse<Tender[], PaginatedMeta>>(
-      "/tenders/admin",
-      {
-        params: query,
-      },
-    );
+    return apiClient.get<ApiResponse<Tender[], PaginatedMeta>>('/tenders/admin', {
+      params: query,
+    });
   },
 
   adminCreate(input: CreateTenderDto) {
-    return apiClient.post<ApiResponse<Tender>>("/tenders/admin", input);
+    return apiClient.post<ApiResponse<Tender>>('/tenders/admin', input);
   },
 
   adminGetById(id: string) {
@@ -110,10 +106,7 @@ export const tenderApi = {
   },
 
   adminUpdateStatus(id: string, input: UpdateTenderStatusDto) {
-    return apiClient.patch<ApiResponse<any>>(
-      `/tenders/admin/${id}/status`,
-      input,
-    );
+    return apiClient.patch<ApiResponse<any>>(`/tenders/admin/${id}/status`, input);
   },
 
   cancelTender(id: string) {
@@ -121,70 +114,43 @@ export const tenderApi = {
   },
 
   duplicateTender(id: string) {
-    return apiClient.post<ApiResponse<Tender>>(
-      `/tenders/admin/${id}/duplicate`,
-    );
+    return apiClient.post<ApiResponse<Tender>>(`/tenders/admin/${id}/duplicate`);
   },
 
   getDiff(id: string) {
-    return apiClient.get<ApiResponse<TenderDiffResponse>>(
-      `/tenders/admin/${id}/diff`,
-    );
+    return apiClient.get<ApiResponse<TenderDiffResponse>>(`/tenders/admin/${id}/diff`);
   },
 
   getHistory(id: string) {
-    return apiClient.get<ApiResponse<TenderHistoryLog[]>>(
-      `/tenders/admin/${id}/history`,
-    );
+    return apiClient.get<ApiResponse<TenderHistoryLog[]>>(`/tenders/admin/${id}/history`);
   },
 
   scheduleTender(id: string, input: { publishAt: string; closeAt: string }) {
-    return apiClient.post<ApiResponse<any>>(
-      `/tenders/admin/${id}/schedule`,
-      input,
-    );
+    return apiClient.post<ApiResponse<any>>(`/tenders/admin/${id}/schedule`, input);
   },
 
   answerQuestion(qId: string, input: AnswerQuestionDto) {
-    return apiClient.post<ApiResponse<any>>(
-      `/tenders/admin/questions/${qId}/answer`,
-      input,
-    );
+    return apiClient.post<ApiResponse<any>>(`/tenders/admin/questions/${qId}/answer`, input);
   },
 
   createClarification(id: string, input: CreateClarificationDto) {
-    return apiClient.post<ApiResponse<any>>(
-      `/tenders/admin/${id}/clarifications`,
-      input,
-    );
+    return apiClient.post<ApiResponse<any>>(`/tenders/admin/${id}/clarifications`, input);
   },
 
   createAmendment(id: string, input: CreateAmendmentDto) {
-    return apiClient.post<ApiResponse<any>>(
-      `/tenders/admin/${id}/amendments`,
-      input,
-    );
+    return apiClient.post<ApiResponse<any>>(`/tenders/admin/${id}/amendments`, input);
   },
 
   assignReviewers(id: string, input: AssignReviewerDto) {
-    return apiClient.post<ApiResponse<any>>(
-      `/tenders/admin/${id}/assign`,
-      input,
-    );
+    return apiClient.post<ApiResponse<any>>(`/tenders/admin/${id}/assign`, input);
   },
 
   submitReviewComment(reviewId: string, input: SubmitReviewCommentDto) {
-    return apiClient.post<ApiResponse<any>>(
-      `/tenders/admin/reviews/${reviewId}/comments`,
-      input,
-    );
+    return apiClient.post<ApiResponse<any>>(`/tenders/admin/reviews/${reviewId}/comments`, input);
   },
 
   addCommitteeMember(id: string, input: TenderCommitteeDto) {
-    return apiClient.post<ApiResponse<any>>(
-      `/tenders/admin/${id}/committee`,
-      input,
-    );
+    return apiClient.post<ApiResponse<any>>(`/tenders/admin/${id}/committee`, input);
   },
 
   submitEvaluation(participantId: string, input: SubmitEvaluationDto) {
@@ -195,38 +161,27 @@ export const tenderApi = {
   },
 
   inviteTender(id: string, input: TenderInvitationDto) {
-    return apiClient.post<ApiResponse<any>>(
-      `/tenders/admin/${id}/invitations`,
-      input,
-    );
+    return apiClient.post<ApiResponse<any>>(`/tenders/admin/${id}/invitations`, input);
   },
 
   createTemplate(input: TenderTemplateDto) {
-    return apiClient.post<ApiResponse<any>>("/tenders/admin/templates", input);
+    return apiClient.post<ApiResponse<any>>('/tenders/admin/templates', input);
   },
 
   getReportBudget() {
-    return apiClient.get<ApiResponse<TenderReport>>(
-      "/tenders/admin/reports/budget",
-    );
+    return apiClient.get<ApiResponse<TenderReport>>('/tenders/admin/reports/budget');
   },
 
   getReportStatus() {
-    return apiClient.get<ApiResponse<TenderReport>>(
-      "/tenders/admin/reports/status",
-    );
+    return apiClient.get<ApiResponse<TenderReport>>('/tenders/admin/reports/status');
   },
 
   getReportVendors() {
-    return apiClient.get<ApiResponse<TenderReport>>(
-      "/tenders/admin/reports/vendors",
-    );
+    return apiClient.get<ApiResponse<TenderReport>>('/tenders/admin/reports/vendors');
   },
 
   submitForReview(id: string) {
-    return apiClient.post<ApiResponse<any>>(
-      `/tenders/admin/${id}/submit-review`,
-    );
+    return apiClient.post<ApiResponse<any>>(`/tenders/admin/${id}/submit-review`);
   },
 
   getReviews(id: string) {
@@ -235,53 +190,35 @@ export const tenderApi = {
 
   submitReviewDecision(
     reviewId: string,
-    decision: "APPROVED" | "REJECTED" | "CHANGES_REQUESTED",
+    decision: 'APPROVED' | 'REJECTED' | 'CHANGES_REQUESTED',
     commentText?: string,
   ) {
-    return apiClient.patch<ApiResponse<any>>(
-      `/tenders/admin/reviews/${reviewId}/decisions`,
-      {
-        decision,
-        commentText,
-      },
-    );
+    return apiClient.patch<ApiResponse<any>>(`/tenders/admin/reviews/${reviewId}/decisions`, {
+      decision,
+      commentText,
+    });
   },
 
   getVersionDiff(id: string, v1: number = 1, v2: number = 2) {
-    return apiClient.get<ApiResponse<TenderDiffResponse>>(
-      `/tenders/admin/${id}/diff`,
-      {
-        params: { v1, v2 },
-      },
-    );
+    return apiClient.get<ApiResponse<TenderDiffResponse>>(`/tenders/admin/${id}/diff`, {
+      params: { v1, v2 },
+    });
   },
 
   updateBasicInfo(id: string, data: Partial<UpdateTenderDto>) {
-    return apiClient.patch<ApiResponse<Tender>>(
-      `/tenders/admin/${id}/basic-info`,
-      data,
-    );
+    return apiClient.patch<ApiResponse<Tender>>(`/tenders/admin/${id}/basic-info`, data);
   },
 
   updateLocation(id: string, data: Partial<UpdateTenderDto>) {
-    return apiClient.patch<ApiResponse<Tender>>(
-      `/tenders/admin/${id}/location`,
-      data,
-    );
+    return apiClient.patch<ApiResponse<Tender>>(`/tenders/admin/${id}/location`, data);
   },
 
   updateCommercial(id: string, data: Partial<UpdateTenderDto>) {
-    return apiClient.patch<ApiResponse<Tender>>(
-      `/tenders/admin/${id}/commercial`,
-      data,
-    );
+    return apiClient.patch<ApiResponse<Tender>>(`/tenders/admin/${id}/commercial`, data);
   },
 
   updateSchedule(id: string, data: Partial<UpdateTenderDto>) {
-    return apiClient.patch<ApiResponse<Tender>>(
-      `/tenders/admin/${id}/schedule`,
-      data,
-    );
+    return apiClient.patch<ApiResponse<Tender>>(`/tenders/admin/${id}/schedule`, data);
   },
 
   getCompletionStatus(id: string) {
@@ -294,8 +231,6 @@ export const tenderApi = {
   },
 
   getReportPerformance() {
-    return apiClient.get<ApiResponse<TenderReport>>(
-      "/tenders/admin/reports/performance",
-    );
+    return apiClient.get<ApiResponse<TenderReport>>('/tenders/admin/reports/performance');
   },
 };

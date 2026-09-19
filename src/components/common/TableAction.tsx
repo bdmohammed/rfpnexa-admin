@@ -1,5 +1,6 @@
-import { Download, RefreshCcw } from "lucide-react";
-import Button from "../ui/Button";
+import { Download, RefreshCcw } from 'lucide-react';
+
+import Button from '../ui/Button';
 
 export default function TableAction() {
   return (

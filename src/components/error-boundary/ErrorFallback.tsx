@@ -1,9 +1,10 @@
-// src/components/error-boundary/ErrorFallback.tsx
 'use client';
 
 import React, { useState } from 'react';
-import { AlertTriangle, RefreshCw, Home, Copy, Check } from 'lucide-react';
-import { serializeError } from '@/lib/errors/serialize-error';
+import Link from 'next/link';
+import { AlertTriangle, Check, Copy, Home, RefreshCw } from 'lucide-react';
+
+import { serializeError } from '@/lib/errors/serializeError';
 
 export interface ErrorFallbackProps {
   error: Error;
@@ -29,7 +30,7 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, reset }) =>
         timestamp: new Date().toISOString(),
       },
       null,
-      2
+      2,
     );
 
     try {
@@ -64,7 +65,6 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, reset }) =>
       className="min-h-[70vh] w-full flex items-center justify-center p-6 bg-linear-to-b from-[var(--background,rgba(9,10,15,1))] to-[var(--surface-secondary,rgba(17,19,28,0.6))] text-[var(--foreground,#f5f5f5)]"
     >
       <div className="relative w-full max-w-xl p-8 rounded-2xl border border-[var(--border,rgba(255,255,255,0.05))] bg-[var(--background,rgba(17,19,28,0.85))] shadow-2xl overflow-hidden backdrop-blur-md">
-        
         {/* Decorative corner glows */}
         <div className="absolute -top-12 -right-12 w-32 h-32 bg-red-500/10 blur-3xl rounded-full pointer-events-none" />
         <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-yellow-500/5 blur-3xl rounded-full pointer-events-none" />
@@ -78,10 +78,8 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, reset }) =>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">
             Something Went Wrong
           </h1>
-          
-          <p className="text-sm text-[var(--muted,#9ca3af)] max-w-md mb-3">
-            {serialized.message}
-          </p>
+
+          <p className="text-sm text-[var(--muted,#9ca3af)] max-w-md mb-3">{serialized.message}</p>
 
           <span className="text-[10px] uppercase font-mono tracking-widest text-[var(--muted,#9ca3af)] opacity-70 bg-white/5 px-2.5 py-1 rounded-md mb-6">
             Error ID: {serialized.errorId}
@@ -98,13 +96,13 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, reset }) =>
               {isResetting ? 'Retrying...' : 'Try Again'}
             </button>
 
-            <a
+            <Link
               href="/"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold rounded-lg border border-[var(--border,rgba(255,255,255,0.05))] bg-white/5 hover:bg-white/10 transition-all cursor-pointer"
             >
               <Home className="w-4 h-4" />
               Go Back Home
-            </a>
+            </Link>
           </div>
 
           {/* Diagnostics Section (Development Only) */}
@@ -114,7 +112,7 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, reset }) =>
                 <span className="text-xs font-semibold uppercase tracking-wider text-yellow-500">
                   Developer Diagnostics
                 </span>
-                
+
                 <button
                   onClick={handleCopy}
                   className="inline-flex items-center gap-1.5 px-2 py-1 text-[10px] font-semibold bg-white/5 hover:bg-white/10 rounded-md transition-colors cursor-pointer"

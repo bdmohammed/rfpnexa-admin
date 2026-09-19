@@ -1,17 +1,19 @@
+export enum RoleStatus {
+  ACTIVE = 'ACTIVE',
+  DISABLED = 'DISABLED',
+  ARCHIVED = 'ARCHIVED',
+}
+
 export interface Role {
   id: string;
+  key: string;
   name: string;
   slug: string;
-  description: string;
-  status: "ACTIVE" | "DISABLED" | "ARCHIVED";
-  versionStatus?: "DRAFT" | "IN_REVIEW" | "CHANGES_REQUESTED" | "APPROVED" | "REJECTED";
+  status: RoleStatus;
   isSystemRole: boolean;
-  isDefaultRole?: boolean;
-  activeVersionId?: string | null;
-  version?: number;
-  versionNumber?: string;
-  publishedVersionNumber?: string | null;
-  latestDraftVersionNumber?: string | null;
+  permissions: string[];
+  permissionKeys: string[];
+  userCount: number;
   createdAt: string;
   updatedAt: string;
   createdBy: string;
@@ -20,15 +22,45 @@ export interface Role {
     name: string;
     email: string;
   };
-  reviewer?: {
-    id: string;
-    name: string;
-    email: string;
-  } | null;
-  userCount: number;
-  permissions: string[]; // Simplified resolved list of permission keys
-  permissionKeys?: string[];
 }
+// export interface Role {
+//   id: string;
+//   name: string;
+//   slug: string;
+//   description: string;
+//   status: 'ACTIVE' | 'DISABLED' | 'ARCHIVED';
+//   versionStatus?:
+//     | 'DRAFT'
+//     | 'IN_REVIEW'
+//     | 'PENDING_REVIEW'
+//     | 'CHANGES_REQUESTED'
+//     | 'SUBMITTED'
+//     | 'APPROVED'
+//     | 'REJECTED';
+//   isSystemRole: boolean;
+//   isDefaultRole?: boolean;
+//   activeVersionId?: string | null;
+//   version?: number;
+//   versionNumber?: string;
+//   publishedVersionNumber?: string | null;
+//   latestDraftVersionNumber?: string | null;
+//   createdAt: string;
+//   updatedAt: string;
+//   createdBy: string;
+//   createdByUser: {
+//     id: string;
+//     name: string;
+//     email: string;
+//   };
+//   reviewer?: {
+//     id: string;
+//     name: string;
+//     email: string;
+//   } | null;
+//   userCount: number;
+//   permissions: string[]; // Simplified resolved list of permission keys
+//   permissionKeys?: string[];
+// }
 
 export interface RoleActivity {
   id: string;
@@ -41,18 +73,18 @@ export interface RoleActivity {
     email: string;
   };
   activityType:
-    | "ROLE_CREATED"
-    | "ROLE_UPDATED"
-    | "PERMISSION_ADDED"
-    | "PERMISSION_REMOVED"
-    | "REVIEW_ASSIGNED"
-    | "COMMENT_ADDED"
-    | "SUBMITTED"
-    | "APPROVED"
-    | "REJECTED"
-    | "CHANGES_REQUESTED"
-    | "ARCHIVED"
-    | "RESTORED";
+    | 'ROLE_CREATED'
+    | 'ROLE_UPDATED'
+    | 'PERMISSION_ADDED'
+    | 'PERMISSION_REMOVED'
+    | 'REVIEW_ASSIGNED'
+    | 'COMMENT_ADDED'
+    | 'SUBMITTED'
+    | 'APPROVED'
+    | 'REJECTED'
+    | 'CHANGES_REQUESTED'
+    | 'ARCHIVED'
+    | 'RESTORED';
   oldValue?: any;
   newValue?: any;
   metadata?: any;
@@ -68,7 +100,7 @@ export interface RoleComment {
     name: string;
     email: string;
   };
-  action: "SUBMIT" | "APPROVE" | "REJECT" | "REQUEST_CHANGES" | "COMMENT";
+  action: 'SUBMIT' | 'APPROVE' | 'REJECT' | 'REQUEST_CHANGES' | 'COMMENT';
   comment: string;
   isInternal?: boolean;
   editedAt?: string | null;
@@ -143,21 +175,23 @@ export interface CreateRoleDto {
   name: string;
   description?: string;
   permissions: string[];
+  status?: RoleStatus;
 }
 
 export interface UpdateRoleDto {
   name: string;
   description?: string;
   permissions: string[];
+  status?: RoleStatus;
 }
 
 export interface CreateAssignmentDto {
   userId: string;
   roleId: string;
-  effectiveAt?: string | null;
-  expiresAt?: string | null;
-  reason?: string;
-  comment?: string;
-  reviewerId?: string;
-  status?: "DRAFT" | "SUBMITTED" | "APPROVED";
+  // effectiveAt?: string | null;
+  // expiresAt?: string | null;
+  // reason?: string;
+  // comment?: string;
+  // reviewerId?: string;
+  // status?: 'DRAFT' | 'SUBMITTED' | 'APPROVED';
 }

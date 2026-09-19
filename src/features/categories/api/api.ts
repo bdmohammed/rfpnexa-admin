@@ -1,86 +1,92 @@
-import { apiClient } from '@/lib/http';
-import type { ApiResponse, Category } from '@/types';
 import type {
-    BatchCategoriesResult,
-    BatchCategoryItem,
-    CategoryDecisionInput,
-    CategoryGovernance,
-    CategoryHistoryItem,
-    CategoryQuery,
-    CategoryStats,
-    CreateCategoryInput,
-    SubmitCategoryReviewInput,
-    UpdateCategoryInput,
+  BatchCategoriesResult,
+  BatchCategoryItem,
+  CategoryDecisionInput,
+  CategoryGovernance,
+  CategoryHistoryItem,
+  CategoryQuery,
+  CategoryStats,
+  CreateCategoryInput,
+  SubmitCategoryReviewInput,
+  UpdateCategoryInput,
 } from '../types';
+import type { ApiResponse, Category } from '@/types';
+import { apiClient } from '@/lib/http';
 
 export const categoryApi = {
-    getCategories(query?: CategoryQuery) {
-        return apiClient.get<ApiResponse<{ categories: Category[]; total: number }>>('/categories', {
-            params: query,
-        });
-    },
+  getDistinctCategories() {
+    return apiClient.get<ApiResponse<{ categories: Pick<Category, 'id' | 'name'>[]; }>>('/categories/categories');
+  },
 
-    getCategoryStats() {
-        return apiClient.get<ApiResponse<CategoryStats>>('/categories/analytics');
-    },
+  getCategories(query?: CategoryQuery) {
+    return apiClient.get<ApiResponse<{ categories: Category[]; total: number }>>('/categories', {
+      params: query,
+    });
+  },
 
-    createCategory(input: CreateCategoryInput) {
-        return apiClient.post<ApiResponse<Category>>('/categories', input);
-    },
+  getCategoryStats() {
+    return apiClient.get<ApiResponse<CategoryStats>>('/categories/analytics');
+  },
 
-    batchCategories(payload: BatchCategoryItem[] | string, isCsv = false) {
-        return apiClient.post<ApiResponse<BatchCategoriesResult>>('/categories/batch', payload, {
-            headers: {
-                'Content-Type': isCsv ? 'text/csv' : 'application/json',
-            },
-        });
-    },
+  createCategory(input: CreateCategoryInput) {
+    return apiClient.post<ApiResponse<Category>>('/categories', input);
+  },
 
-    updateCategory(id: string, input: UpdateCategoryInput) {
-        return apiClient.patch<ApiResponse<Category>>(`/categories/${id}`, input);
-    },
+  batchCategories(payload: BatchCategoryItem[] | string, isCsv = false) {
+    return apiClient.post<ApiResponse<BatchCategoriesResult>>('/categories/batch', payload, {
+      headers: {
+        'Content-Type': isCsv ? 'text/csv' : 'application/json',
+      },
+    });
+  },
 
-    deleteCategory(id: string) {
-        return apiClient.delete<ApiResponse<null>>(`/categories/${id}`);
-    },
+  updateCategory(id: string, input: UpdateCategoryInput) {
+    return apiClient.patch<ApiResponse<Category>>(`/categories/${id}`, input);
+  },
 
-    getCategoryHistory(id: string) {
-        return apiClient.get<ApiResponse<CategoryHistoryItem[]>>(`/categories/${id}/history`);
-    },
+  deleteCategory(id: string) {
+    return apiClient.delete<ApiResponse<null>>(`/categories/${id}`);
+  },
 
-    getCategoryGovernance(id: string) {
-        return apiClient.get<ApiResponse<CategoryGovernance>>(`/categories/${id}/governance`);
-    },
+  getCategoryHistory(id: string) {
+    return apiClient.get<ApiResponse<CategoryHistoryItem[]>>(`/categories/${id}/history`);
+  },
 
-    submitCategoryReview(id: string, input: SubmitCategoryReviewInput) {
-        return apiClient.post<ApiResponse<any>>(`/categories/${id}/submit`, input);
-    },
+  getCategoryGovernance(id: string) {
+    return apiClient.get<ApiResponse<CategoryGovernance>>(`/categories/${id}/governance`);
+  },
 
-    addCategoryComment(id: string, comment: string) {
-        return apiClient.post<ApiResponse<any>>(`/categories/${id}/comments`, { comment });
-    },
+  submitCategoryReview(id: string, input: SubmitCategoryReviewInput) {
+    return apiClient.post<ApiResponse<any>>(`/categories/${id}/submit`, input);
+  },
 
-    assignCategoryReviewer(id: string, reviewerIds: string[]) {
-        return apiClient.post<ApiResponse<any>>(`/categories/${id}/assign-reviewer`, { reviewerIds });
-    },
+  addCategoryComment(id: string, comment: string) {
+    return apiClient.post<ApiResponse<any>>(`/categories/${id}/comments`, {
+      comment,
+    });
+  },
 
-    reviewCategoryDecision(id: string, input: CategoryDecisionInput) {
-        return apiClient.post<ApiResponse<any>>(`/categories/${id}/review`, input);
-    },
+  assignCategoryReviewer(id: string, reviewerIds: string[]) {
+    return apiClient.post<ApiResponse<any>>(`/categories/${id}/assign-reviewer`, { reviewerIds });
+  },
 
-    createCategoryDraftVersion(id: string) {
-        return apiClient.post<ApiResponse<any>>(`/categories/${id}/draft`);
-    },
+  reviewCategoryDecision(id: string, input: CategoryDecisionInput) {
+    return apiClient.post<ApiResponse<any>>(`/categories/${id}/review`, input);
+  },
 
-    archiveCategory(id: string) {
-        return apiClient.post<ApiResponse<any>>(`/categories/${id}/archive`);
-    },
+  createCategoryDraftVersion(id: string) {
+    return apiClient.post<ApiResponse<any>>(`/categories/${id}/draft`);
+  },
 
-    restoreCategory(id: string) {
-        return apiClient.post<ApiResponse<any>>(`/categories/${id}/restore`);
-    },
+  archiveCategory(id: string) {
+    return apiClient.post<ApiResponse<any>>(`/categories/${id}/archive`);
+  },
 
-    getCategoryUsage(id: string) {
-        return apiClient.get<ApiResponse<any>>(`/categories/${id}/usage`);
-    },
+  restoreCategory(id: string) {
+    return apiClient.post<ApiResponse<any>>(`/categories/${id}/restore`);
+  },
+
+  getCategoryUsage(id: string) {
+    return apiClient.get<ApiResponse<any>>(`/categories/${id}/usage`);
+  },
 };

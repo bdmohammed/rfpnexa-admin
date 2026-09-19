@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { usePermissions } from "@/hooks/usePermissions";
-import { ReactNode } from "react";
+import type { ReactNode } from 'react';
+import { usePermissions } from '@/hooks/usePermissions';
 
 interface CanProps {
   permission?: string;

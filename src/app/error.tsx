@@ -1,7 +1,7 @@
-// src/app/error.tsx
 'use client';
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+
 import { ErrorFallback } from '@/components/error-boundary/ErrorFallback';
 import { handleClientError } from '@/lib/errors/utils';
 

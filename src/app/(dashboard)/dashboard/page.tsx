@@ -1,361 +1,354 @@
-"use client";
+// 'use client';
 
-import { useEffect, useState, useRef } from "react";
-import { RefreshCw, ShieldAlert, Lock } from "lucide-react";
-import { apiClient } from "@/lib/http";
-import { usePermissions } from "@/hooks/usePermissions";
-import {
-  useDashboardConfig,
-  useUpdateDashboardLayout,
-  useResetDashboardLayout,
-} from "@/features/dashboard/api/queries";
+import { redirect } from "next/navigation";
 
-// Widgets import
-import RevenueWidget from "./widgets/RevenueWidget";
-import TenderWorkflowWidget from "./widgets/TenderWorkflowWidget";
-import UsersWidget from "./widgets/UsersWidget";
-import ReviewQueueWidget from "./widgets/ReviewQueueWidget";
-import AlertWidget from "./widgets/AlertWidget";
-import ActivityWidget from "./widgets/ActivityWidget";
-import NotificationsWidget from "./widgets/NotificationsWidget";
-import SystemHealthWidget from "./widgets/SystemHealthWidget";
-import QuickActionsWidget from "./widgets/QuickActionsWidget";
+// import { useEffect, useMemo, useState } from 'react';
+// import { RefreshCw, ShieldAlert } from 'lucide-react';
 
-// Sub-components import
-import { DashboardBanner } from "./components/DashboardBanner";
-import { CustomizerBar } from "./components/CustomizerBar";
-import { WidgetCard } from "./components/WidgetCard";
+// import { CustomizerBar } from './components/CustomizerBar';
+// // Sub-components import
+// import { DashboardBanner } from './components/DashboardBanner';
+// import { WidgetCard } from './components/WidgetCard';
+// import AlertWidget from './widgets/AlertWidget';
+// // Widgets import
+// import RevenueWidget from './widgets/RevenueWidget';
+// import SystemHealthWidget from './widgets/SystemHealthWidget';
+// import TenderWorkflowWidget from './widgets/TenderWorkflowWidget';
+// import UsersWidget from './widgets/UsersWidget';
 
-export default function Dashboard() {
-  const { isInitializing } = usePermissions();
+// import type { WidgetDefinition } from '@/features/dashboard/types';
+// import type { JSX } from 'react';
+// import {
+//   useDashboardConfig,
+//   useResetDashboardLayout,
+//   useUpdateDashboardLayout,
+// } from '@/features/dashboard/api/queries';
+// import { useDashboardStream } from '@/hooks/useDashboardStream';
+// import { usePermissions } from '@/hooks/usePermissions';
+// import { logger } from '@/lib/logger';
 
-  const { data: config, isLoading: isConfigLoading } = useDashboardConfig();
-  const updateLayoutMutation = useUpdateDashboardLayout();
-  const resetLayoutMutation = useResetDashboardLayout();
+// const widgets = {
+//   mrr_arr: RevenueWidget,
+//   users: UsersWidget,
+//   tender_workflow: TenderWorkflowWidget,
+//   system_health: SystemHealthWidget,
+//   critical_alerts: AlertWidget,
+// } as const;
 
-  const [registry, setRegistry] = useState<any[]>([]);
-  const [layout, setLayout] = useState<any[]>([]);
-  const [isEditMode, setIsEditMode] = useState(false);
+// type WidgetId = keyof typeof widgets;
 
-  // SSE Live Data registries
-  const [liveQueue, setLiveQueue] = useState<any>(null);
-  const [liveAlerts, setLiveAlerts] = useState<any>(null);
-  const [liveHealth, setLiveHealth] = useState<any>(null);
-  const [sseConnected, setSseConnected] = useState(false);
+// const UnknownWidget = () => <div className="p-4 italic text-text-light">Widget Not Configured</div>;
 
-  const eventSourceRef = useRef<EventSource | null>(null);
+// New Code
+export default function DashboardPage() {
+  redirect('/tenders');
+  // const { isInitializing, hasPermission } = usePermissions();
 
-  // Permission Checks
-  // const canViewDashboard = hasPermission("dashboard.view");
-  // const canCustomizeGrid = hasPermission("dashboard.export") || isSuperAdmin;
+  // const { data: config, isLoading: isConfigLoading } = useDashboardConfig();
 
-  useEffect(() => {
-    if (config) {
-      setRegistry(config.widgets || []);
-      const sortedLayout = (config.layout || []).sort((a: any, b: any) => {
-        if (a.y !== b.y) return a.y - b.y;
-        return a.x - b.x;
-      });
-      setLayout(sortedLayout);
-    }
-  }, [config]);
+  // const updateLayoutMutation = useUpdateDashboardLayout();
 
-  // SSE connection establishment
-  const connectSSE = () => {
-    if (eventSourceRef.current) {
-      eventSourceRef.current.close();
-    }
+  // const resetLayoutMutation = useResetDashboardLayout();
 
-    const tokenUrl = `${apiClient.defaults.baseURL}/dashboard/stream`;
+  // /**
+  //  * Starts the dashboard SSE connection.
+  //  * The hook owns the EventSource lifecycle and
+  //  * synchronizes live snapshots into Zustand.
+  //  */
+  // useDashboardStream();
 
-    // Establishing EventSource connection
-    const es = new EventSource(tokenUrl, { withCredentials: true });
-    eventSourceRef.current = es;
+  // /**
+  //  * Local page state.
+  //  *
+  //  * The dashboard data itself now lives entirely in
+  //  * Zustand. The page only manages layout editing.
+  //  */
+  // const [layout, setLayout] = useState<WidgetDefinition[]>([]);
+  // const [savedLayout, setSavedLayout] = useState<WidgetDefinition[]>([]);
 
-    es.onopen = () => {
-      setSseConnected(true);
-    };
+  // const [isEditMode, setIsEditMode] = useState(false);
 
-    es.addEventListener("review_queue", (event: MessageEvent) => {
-      try {
-        setLiveQueue(JSON.parse(event.data));
-      } catch (err) {
-        console.error(err);
-      }
-    });
+  // /**
+  //  * Permission checks.
+  //  */
+  // const canViewDashboard = hasPermission('dashboard.view');
 
-    es.addEventListener("alerts", (event: MessageEvent) => {
-      try {
-        setLiveAlerts(JSON.parse(event.data));
-      } catch (err) {
-        console.error(err);
-      }
-    });
+  // /**
+  //  * Initialize widget layout once configuration
+  //  * has been loaded.
+  //  */
+  // useEffect(() => {
+  //   if (!config) {
+  //     return;
+  //   }
 
-    es.addEventListener("health", (event: MessageEvent) => {
-      try {
-        setLiveHealth(JSON.parse(event.data));
-      } catch (err) {
-        console.error(err);
-      }
-    });
+  //   const sortedLayout = [...config.widgets].sort((a, b) => {
+  //     if (a.defaultLayout.y !== b.defaultLayout.y) {
+  //       return a.defaultLayout.y - b.defaultLayout.y;
+  //     }
 
-    es.onerror = () => {
-      setSseConnected(false);
-    };
-  };
+  //     return a.defaultLayout.x - b.defaultLayout.x;
+  //   });
 
-  useEffect(() => {
-    // if (!canViewDashboard) return;
-    connectSSE();
+  //   setLayout(sortedLayout);
+  // }, [config]);
 
-    return () => {
-      if (eventSourceRef.current) {
-        eventSourceRef.current.close();
-      }
-    };
-  }, []);
+  // useEffect(() => {
+  //   if (!config) {
+  //     return;
+  //   }
 
-  const handleResetLayout = async () => {
-    try {
-      await resetLayoutMutation.mutateAsync();
-      setIsEditMode(false);
-    } catch (err) {
-      console.error(err);
-      alert("Failed to reset layout");
-    }
-  };
+  //   const sortedLayout = [...config.widgets].sort(/* ... */);
 
-  const handleSaveLayout = async () => {
-    try {
-      const payload = layout.map((w) => ({
-        ...w,
-        widgetId: w.widgetId || w.id,
-      }));
-      await updateLayoutMutation.mutateAsync({ widgets: payload });
-      setIsEditMode(false);
-    } catch (err) {
-      console.error(err);
-      alert("Failed to save layout configuration");
-    }
-  };
+  //   setLayout(sortedLayout);
+  //   setSavedLayout(sortedLayout);
+  // }, [config]);
 
-  // Layout mutators in edit mode
-  const moveWidget = (index: number, direction: "up" | "down") => {
-    const nextLayout = [...layout];
-    const targetIndex = direction === "up" ? index - 1 : index + 1;
-    if (targetIndex < 0 || targetIndex >= nextLayout.length) return;
+  // /**
+  //  * Restore default dashboard layout.
+  //  */
+  // const handleResetLayout = async () => {
+  //   try {
+  //     const updatedLayout = await resetLayoutMutation.mutateAsync();
 
-    // Swap placement order values
-    const temp = nextLayout[index];
-    nextLayout[index] = nextLayout[targetIndex];
-    nextLayout[targetIndex] = temp;
+  //     setLayout(updatedLayout.widgets);
+  //     setSavedLayout(updatedLayout.widgets);
+  //     setIsEditMode(false);
+  //   } catch (err) {
+  //     logger.error('Failed to reset dashboard layout', err as Error, {
+  //       context: {
+  //         source: 'Dashboard',
+  //         action: 'resetLayout',
+  //       },
+  //     });
 
-    // Re-index x/y coordinates logically
-    nextLayout.forEach((w, idx) => {
-      w.y = Math.floor(idx / 3) * 2;
-      w.x = (idx % 3) * 2;
-    });
+  //     alert('Failed to reset layout');
+  //   }
+  // };
 
-    setLayout(nextLayout);
-  };
+  // /**
+  //  * Persist widget layout.
+  //  */
+  // const handleSaveLayout = async () => {
+  //   try {
+  //     const widgets = layout.map((widget) => ({
+  //       id: widget.id,
+  //       ...widget.defaultLayout,
+  //     }));
 
-  const changeWidgetWidth = (index: number, width: number) => {
-    const nextLayout = [...layout];
-    nextLayout[index].w = width;
-    setLayout(nextLayout);
-  };
+  //     await updateLayoutMutation.mutateAsync({
+  //       widgets,
+  //     });
+  //     setSavedLayout(layout);
+  //     setIsEditMode(false);
+  //   } catch (err) {
+  //     logger.error('Failed to save dashboard layout', err as Error, {
+  //       context: {
+  //         source: 'Dashboard',
+  //         action: 'saveLayout',
+  //       },
+  //     });
 
-  const toggleWidgetHide = (index: number) => {
-    const nextLayout = [...layout];
-    nextLayout[index].hidden = !nextLayout[index].hidden;
-    setLayout(nextLayout);
-  };
+  //     alert('Failed to save layout configuration');
+  //   }
+  // };
 
-  const toggleWidgetCollapse = (index: number) => {
-    const nextLayout = [...layout];
-    nextLayout[index].collapsed = !nextLayout[index].collapsed;
-    setLayout(nextLayout);
-  };
+  // /**
+  //  * Move widget position while editing.
+  //  */
+  // const moveWidget = (index: number, direction: 'up' | 'down') => {
+  //   const nextLayout = [...layout];
 
-  // const renderRestrictedPlaceholder = (
-  //   widgetName: string,
-  //   permissionKey: string,
-  // ) => (
-  //   <div className="p-6 text-center space-y-2 bg-background/30 rounded-xl">
-  //     <Lock size={20} className="mx-auto text-amber-500/80" />
-  //     <span className="text-xs font-bold text-text block">{widgetName}</span>
-  //     <p className="text-[11px] text-text-light max-w-xs mx-auto">
-  //       Requires{" "}
-  //       <code className="text-primary font-mono bg-primary/10 px-1 py-0.5 rounded">
-  //         {permissionKey}
-  //       </code>{" "}
-  //       permission.
-  //     </p>
-  //   </div>
-  // );
+  //   const targetIndex = direction === 'up' ? index - 1 : index + 1;
 
-  const renderWidgetContent = (widgetId: string) => {
-    switch (widgetId) {
-      case "mrr_arr":
-        // return hasPermission("subscription.view") ? (
-        return <RevenueWidget />;
-      // ) : (
-      //   renderRestrictedPlaceholder(
-      //     "Revenue & ARR Metrics",
-      //     "subscription.view",
-      //   )
-      // );
+  //   if (targetIndex < 0 || targetIndex >= nextLayout.length) {
+  //     return;
+  //   }
 
-      case "tender_workflow":
-        // return hasPermission("tender.view") ? (
-        return <TenderWorkflowWidget />;
-      // ) : (
-      //   renderRestrictedPlaceholder("Tender Workflow", "tender.view")
-      // );
+  //   [nextLayout[index], nextLayout[targetIndex]] = [nextLayout[targetIndex]!, nextLayout[index]!];
 
-      case "users":
-        // return hasPermission("user.view") ? (
-        return <UsersWidget />;
-      // ) : (
-      //   renderRestrictedPlaceholder("User Activity", "user.view")
-      // );
+  //   /**
+  //    * Recalculate layout coordinates.
+  //    */
+  //   const reordered = nextLayout.map((widget, index) => ({
+  //     ...widget,
+  //     defaultLayout: {
+  //       ...widget.defaultLayout,
+  //       y: Math.floor(index / 3) * 2,
+  //       x: (index % 3) * 2,
+  //     },
+  //   }));
 
-      case "review_queue":
-        // return hasPermission("tender.approve") ||
-        // hasPermission("tender.view") ? (
-        return <ReviewQueueWidget liveData={liveQueue} />;
-      // ) : (
-      //   renderRestrictedPlaceholder("Review Queue", "tender.approve")
-      // );
+  //   setLayout(reordered);
+  // };
 
-      case "system_health":
-        // return hasPermission("analytics.view") ? (
-        return <SystemHealthWidget liveData={liveHealth} />;
-      // ) : (
-      //   renderRestrictedPlaceholder("System Health", "analytics.view")
-      // );
+  // /**
+  //  * Change widget width.
+  //  */
+  // const changeWidgetWidth = (index: number, width: number) => {
+  //   setLayout((current) =>
+  //     current.map((widget, i) =>
+  //       i === index
+  //         ? {
+  //             ...widget,
+  //             defaultLayout: {
+  //               ...widget.defaultLayout,
+  //               w: width,
+  //             },
+  //           }
+  //         : widget,
+  //     ),
+  //   );
+  // };
 
-      case "critical_alerts":
-        // return hasPermission("analytics.view") ? (
-        return <AlertWidget liveData={liveAlerts} />;
-      // ) : (
-      //   renderRestrictedPlaceholder("Critical Alerts", "analytics.view")
-      // );
+  // /**
+  //  * Hide / show widget.
+  //  */
+  // const toggleWidgetHide = (index: number) => {
+  //   setLayout((current) =>
+  //     current.map((widget, i) =>
+  //       i === index
+  //         ? {
+  //             ...widget,
+  //             defaultLayout: {
+  //               ...widget.defaultLayout,
+  //               hidden: !widget.defaultLayout.hidden,
+  //             },
+  //           }
+  //         : widget,
+  //     ),
+  //   );
+  // };
 
-      case "recent_activity":
-        // return hasPermission("analytics.view") || hasPermission("user.view") ? (
-        return <ActivityWidget />;
-      // ) : (
-      //   renderRestrictedPlaceholder("Recent Activity", "analytics.view")
-      // );
+  // /**
+  //  * Collapse / expand widget.
+  //  */
+  // const toggleWidgetCollapse = (index: number) => {
+  //   setLayout((current) =>
+  //     current.map((widget, i) =>
+  //       i === index
+  //         ? {
+  //             ...widget,
+  //             defaultLayout: {
+  //               ...widget.defaultLayout,
+  //               collapsed: !widget.defaultLayout.collapsed,
+  //             },
+  //           }
+  //         : widget,
+  //     ),
+  //   );
+  // };
 
-      case "quick_actions":
-        // return hasPermission("user.view") || hasPermission("tender.create") ? (
-        return <QuickActionsWidget />;
-      // ) : (
-      //   renderRestrictedPlaceholder("Quick Actions", "user.view")
-      // );
+  // /**
+  //  * Render widget content.
+  //  */
+  // const renderWidgetContent = (widgetId: WidgetId) => {
+  //   const Widget = widgets[widgetId] as (() => JSX.Element) | undefined;
 
-      case "notifications":
-        return <NotificationsWidget />;
+  //   return Widget ? <Widget /> : <UnknownWidget />;
+  // };
 
-      default:
-        return (
-          <div className="p-4 italic text-text-light">
-            Widget Not Configured
-          </div>
-        );
-    }
-  };
+  // /**
+  //  * Greeting banner.
+  //  */
+  // const getGreetingText = useMemo(() => {
+  //   const hour = new Date().getHours();
 
-  // Compile greeting panel details
-  const getGreetingText = () => {
-    const hours = new Date().getHours();
-    if (hours < 12) return "Good Morning";
-    if (hours < 18) return "Good Afternoon";
-    return "Good Evening";
-  };
+  //   if (hour < 12) {
+  //     return 'Good Morning';
+  //   }
 
-  if (isInitializing || isConfigLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3">
-        <RefreshCw className="h-8 w-8 text-primary animate-spin" />
-        <p className="text-sm font-semibold text-text-light">
-          Loading cockpit...
-        </p>
-      </div>
-    );
-  }
+  //   if (hour < 18) {
+  //     return 'Good Afternoon';
+  //   }
 
-  // Page Access Guard
+  //   return 'Good Evening';
+  // }, []);
+
+  // const serializeLayout = (widgets: WidgetDefinition[]) =>
+  //   widgets.map(({ id, defaultLayout }) => ({
+  //     id,
+  //     x: defaultLayout.x,
+  //     y: defaultLayout.y,
+  //     w: defaultLayout.w,
+  //     h: defaultLayout.h,
+  //     hidden: defaultLayout.hidden,
+  //     collapsed: defaultLayout.collapsed,
+  //   }));
+
+  // const hasUnsavedChanges = useMemo(() => {
+  //   return JSON.stringify(serializeLayout(layout)) !== JSON.stringify(serializeLayout(savedLayout));
+  // }, [layout, savedLayout]);
+
+  // /**
+  //  * Loading state.
+  //  */
+  // if (isInitializing || isConfigLoading) {
+  //   return (
+  //     <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3">
+  //       <RefreshCw className="h-8 w-8 animate-spin text-primary" />
+
+  //       <p className="text-sm font-semibold text-text-light">Loading cockpit...</p>
+  //     </div>
+  //   );
+  // }
+
+  // /**
+  //  * Permission guard.
+  //  */
   // if (!canViewDashboard) {
   //   return (
-  //     <div className="p-8 rounded-3xl border border-rose-500/30 bg-rose-500/5 text-center space-y-3 animate-fade-in">
-  //       <ShieldAlert className="h-10 w-10 text-rose-500 mx-auto" />
-  //       <h2 className="text-xl font-bold text-text">
-  //         Dashboard Access Restricted
-  //       </h2>
-  //       <p className="text-xs text-text-light max-w-md mx-auto">
+  //     <div className="space-y-3 rounded-3xl border border-rose-500/30 bg-rose-500/5 p-8 text-center animate-fade-in">
+  //       <ShieldAlert className="mx-auto h-10 w-10 text-rose-500" />
+
+  //       <h2 className="text-xl font-bold text-text">Dashboard Access Restricted</h2>
+
+  //       <p className="mx-auto max-w-md text-xs text-text-light">
   //         Your account does not have permission (
-  //         <code className="bg-background px-1.5 py-0.5 rounded border border-border text-rose-600 dark:text-rose-400 font-mono">
+  //         <code className="rounded border border-border bg-background px-1.5 py-0.5 font-mono text-rose-600 dark:text-rose-400">
   //           dashboard.view
   //         </code>
-  //         ) to view the main administration cockpit. Please contact an
-  //         administrator if you require access.
+  //         ) to view the administration dashboard.
   //       </p>
   //     </div>
   //   );
   // }
 
-  return (
-    <div className="space-y-6">
-      {/* Banner / Greeting Header Component */}
-      <DashboardBanner
-        greetingText={getGreetingText()}
-        liveQueue={liveQueue}
-        liveAlerts={liveAlerts}
-        sseConnected={sseConnected}
-        onConnectSSE={connectSSE}
-        isEditMode={isEditMode}
-        onToggleEditMode={() => setIsEditMode(!isEditMode)}
-        canCustomize={true}
-      />
+  // return (
+  //   <div className="space-y-6">
+  //     <DashboardBanner
+  //       greetingText={getGreetingText}
+  //       isEditMode={isEditMode}
+  //       onToggleEditMode={() => setIsEditMode((value) => !value)}
+  //       canCustomize
+  //     />
 
-      {/* Customizer Layout Controls Panel Component */}
-      {isEditMode && (
-        <CustomizerBar
-          onResetLayout={handleResetLayout}
-          onSaveLayout={handleSaveLayout}
-          saving={updateLayoutMutation.isPending}
-        />
-      )}
+  //     {isEditMode && (
+  //       <CustomizerBar
+  //         onResetLayout={handleResetLayout}
+  //         onSaveLayout={handleSaveLayout}
+  //         saving={updateLayoutMutation.isPending}
+  //         hasUnsavedChanges={hasUnsavedChanges}
+  //       />
+  //     )}
 
-      {/* Main Widgets Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
-        {layout.map((item, index) => {
-          const widgetId = item.widgetId || item.id;
-          const registryItem = registry.find((w) => w.id === widgetId);
-          if (!registryItem) return null;
-
-          return (
-            <WidgetCard
-              key={widgetId}
-              item={item}
-              index={index}
-              totalItems={layout.length}
-              registryItem={registryItem}
-              isEditMode={isEditMode}
-              onMoveWidget={moveWidget}
-              onChangeWidgetWidth={changeWidgetWidth}
-              onToggleWidgetHide={toggleWidgetHide}
-              onToggleWidgetCollapse={toggleWidgetCollapse}
-            >
-              {renderWidgetContent(widgetId)}
-            </WidgetCard>
-          );
-        })}
-      </div>
-    </div>
-  );
+  //     <div className="grid grid-cols-1 gap-6 md:grid-cols-6">
+  //       {layout.map((item, index) => (
+  //         <WidgetCard
+  //           key={item.id}
+  //           item={item}
+  //           index={index}
+  //           totalItems={layout.length}
+  //           isEditMode={isEditMode}
+  //           onMoveWidget={moveWidget}
+  //           onChangeWidgetWidth={changeWidgetWidth}
+  //           onToggleWidgetHide={toggleWidgetHide}
+  //           onToggleWidgetCollapse={toggleWidgetCollapse}
+  //         >
+  //           {renderWidgetContent(item.id as WidgetId)}
+  //         </WidgetCard>
+  //       ))}
+  //     </div>
+  //   </div>
+  // );
 }

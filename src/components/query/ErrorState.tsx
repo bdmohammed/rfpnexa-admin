@@ -1,6 +1,7 @@
-import { ReactNode } from 'react';
 import { AlertCircle, RefreshCw } from 'lucide-react';
-import { AppError } from '@/lib/errors';
+
+import type { AppError } from '@/lib/errors';
+import type { ReactNode } from 'react';
 
 interface ErrorStateProps {
   title?: string;
@@ -19,7 +20,8 @@ export default function ErrorState({
   retry,
   actions,
 }: ErrorStateProps) {
-  const displayDescription = description || error?.message || 'An unexpected error occurred while loading this data.';
+  const displayDescription =
+    description || error?.message || 'An unexpected error occurred while loading this data.';
 
   return (
     <div className="w-full p-8 md:p-10 my-4 bg-[var(--surface-secondary)] border border-red-500/10 rounded-2xl relative overflow-hidden text-center flex flex-col items-center justify-center">
@@ -29,9 +31,7 @@ export default function ErrorState({
         {icon || <AlertCircle className="w-8 h-8" />}
       </div>
 
-      <h3 className="relative z-10 text-xl font-bold text-[var(--foreground)]">
-        {title}
-      </h3>
+      <h3 className="relative z-10 text-xl font-bold text-[var(--foreground)]">{title}</h3>
       <p className="relative z-10 mt-2 text-sm text-[var(--muted)] max-w-md mx-auto">
         {displayDescription}
       </p>

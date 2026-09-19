@@ -1,5 +1,5 @@
-import StatusBadge from "@/components/common/StatusBadge";
-import type { BackendSubscription } from "@/types";
+import type { BackendSubscription } from '@/types';
+import StatusBadge from '@/components/common/StatusBadge';
 
 export interface PaymentRowProps {
   subscription: BackendSubscription;
@@ -7,30 +7,32 @@ export interface PaymentRowProps {
 
 export default function PaymentRow({ subscription }: PaymentRowProps) {
   const invoice = `SUB-${subscription.id.slice(0, 8).toUpperCase()}`;
-  const company = subscription.user?.companyName || subscription.user?.name || "Personal";
-  const companyShort = company
-    .split(" ")
-    .map((word) => word[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase() || "PE";
-  const plan = subscription.planVersion?.name || subscription.plan?.activeVersion?.name || "Standard Plan";
+  const company = subscription.user?.companyName || subscription.user?.name || 'Personal';
+  const companyShort =
+    company
+      .split(' ')
+      .map((word) => word[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase() || 'PE';
+  const plan =
+    subscription.planVersion?.name || subscription.plan?.activeVersion?.name || 'Standard Plan';
   const amount = `$${((subscription.planVersion?.priceCents || 0) / 100).toFixed(2)}`;
-  
+
   // Status mapping
-  let status = "Inactive";
-  if (subscription.status === "active") {
-    status = "Active";
-  } else if (subscription.status === "pending") {
-    status = "Pending";
-  } else if (subscription.status === "cancelled") {
-    status = "Closed";
+  let status = 'Inactive';
+  if (subscription.status === 'active') {
+    status = 'Active';
+  } else if (subscription.status === 'pending') {
+    status = 'Pending';
+  } else if (subscription.status === 'cancelled') {
+    status = 'Closed';
   }
 
-  const dateStr = new Date(subscription.startDate).toLocaleDateString("en-US", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
+  const dateStr = new Date(subscription.startDate).toLocaleDateString('en-US', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
   });
 
   return (

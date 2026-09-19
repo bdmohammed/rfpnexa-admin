@@ -1,7 +1,8 @@
-import { ReactNode } from 'react';
-import { UseQueryResult } from '@tanstack/react-query';
 import ErrorState from './ErrorState';
-import { AppError } from '@/lib/errors';
+
+import type { AppError } from '@/lib/errors';
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { ReactNode } from 'react';
 
 interface QueryBoundaryProps<TData, TError = AppError> {
   query: UseQueryResult<TData, TError>;
@@ -42,7 +43,13 @@ export default function QueryBoundary<TData, TError = AppError>({
 
   // 1. Pending / Loading state
   if (isPending) {
-    return <>{skeleton || <div className="h-32 w-full animate-pulse bg-[var(--surface-secondary)] border border-[var(--border)] rounded-xl" />}</>;
+    return (
+      <>
+        {skeleton || (
+          <div className="h-32 w-full animate-pulse bg-[var(--surface-secondary)] border border-[var(--border)] rounded-xl" />
+        )}
+      </>
+    );
   }
 
   // 2. Error state

@@ -1,11 +1,20 @@
-import { Category } from "./category";
-import { State } from "./state";
+import type { Category } from './category';
+import type { State } from './state';
 
 export type TenderLifecycleStatus = 'ACTIVE' | 'ARCHIVED' | 'CANCELLED';
-export type TenderVersionStatus = 'DRAFT' | 'SUBMITTED' | 'REVIEW_ASSIGNED' | 'UNDER_REVIEW' | 'APPROVED' | 'REJECTED' | 'CHANGES_REQUESTED' | 'ARCHIVED_VERSION';
+export type TenderVersionStatus =
+  | 'DRAFT'
+  | 'SUBMITTED'
+  | 'REVIEW_ASSIGNED'
+  | 'UNDER_REVIEW'
+  | 'APPROVED'
+  | 'REJECTED'
+  | 'CHANGES_REQUESTED'
+  | 'ARCHIVED_VERSION';
 export type TenderPublicationStatus = 'UNPUBLISHED' | 'SCHEDULED' | 'PUBLISHED' | 'RETRACTED';
 export type TenderBiddingStatus = 'NOT_OPEN' | 'OPEN' | 'CLOSED';
-export type TenderProcessStatus = 'PRE_BIDDING' | 'IN_BIDDING' | 'UNDER_EVALUATION' | 'AWARDED' | 'COMPLETED' | 'FAILED';
+export type TenderProcessStatus =
+  'PRE_BIDDING' | 'IN_BIDDING' | 'UNDER_EVALUATION' | 'AWARDED' | 'COMPLETED' | 'FAILED';
 
 export interface Tender {
   id: string;
@@ -88,7 +97,15 @@ export interface TenderParticipant {
   vendorId: string;
   vendorName: string;
   vendorEmail: string;
-  status: 'invited' | 'registered' | 'submitted' | 'qualified' | 'rejected' | 'awarded' | 'disqualified' | 'withdrawn';
+  status:
+    | 'invited'
+    | 'registered'
+    | 'submitted'
+    | 'qualified'
+    | 'rejected'
+    | 'awarded'
+    | 'disqualified'
+    | 'withdrawn';
   submissionVersion: number | null;
   withdrawnAt: string | null;
   evaluationCompleted: boolean;

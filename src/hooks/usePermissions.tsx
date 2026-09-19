@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import { useAuthStore } from "../features/auth/store/store";
+import { useAuthStore } from '../features/auth/store/store';
 
+// fix: types
+// wrong logic
 export function usePermissions() {
   const user = useAuthStore((state: any) => state.user);
   const isAuthenticated = useAuthStore((state: any) => state.isAuthenticated);
@@ -9,7 +11,7 @@ export function usePermissions() {
 
   const permissions = user?.permissions ?? [];
   const roles = user?.roles ?? [];
-  const isSuperAdmin = roles.includes("super-admin") || false;
+  const isSuperAdmin = roles.includes('super-admin') ?? false;
 
   const hasPermission = (permission: string) => {
     return isSuperAdmin || permissions.includes(permission);

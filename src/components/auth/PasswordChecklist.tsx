@@ -1,11 +1,11 @@
+'use client';
+
 import React from 'react';
 import { Check } from 'lucide-react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 interface PasswordChecklistProps {
   password?: string;
-  isTouched?: boolean;
-  isDirty?: boolean;
-  isSubmitted?: boolean;
 }
 
 const requirements = [
@@ -36,50 +36,60 @@ const requirements = [
   },
 ];
 
-export const PasswordChecklist = React.memo(({
-  password = '',
-  isTouched = false,
-  isDirty = false,
-  isSubmitted = false,
-}: PasswordChecklistProps) => {
-  if (!isDirty && !isTouched && !isSubmitted) return null;
+export const PasswordChecklist = React.memo(
+  ({ password: propPassword }: PasswordChecklistProps) => {
+    const formContext = useFormContext<Required<PasswordChecklistProps>>();
 
-  return (
-    <div className="mt-3 p-4 bg-[var(--surface-secondary)] border border-[var(--border)] rounded-lg space-y-2">
-      <p className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider">
-        Password Requirements
-      </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-        {requirements.map((req) => {
-          const isSatisfied = req.check(password);
-          return (
-            <div
-              key={req.id}
-              className="flex items-center gap-2 text-xs transition-all duration-200"
-            >
+    // Consume FormContext state if available, else fallback to direct props
+    const watchedPassword = useWatch({
+      control: formContext.control,
+      name: 'password',
+      defaultValue: propPassword ?? '',
+    });
+
+    const password = watchedPassword;
+    const isTouched = formContext.formState.touchedFields.password;
+    const isDirty = formContext.formState.dirtyFields.password;
+    const { isSubmitted } = formContext.formState;
+
+    if (!isDirty && !isTouched && !isSubmitted) return null;
+
+    return (
+      <div className="mt-3 p-4 bg-[var(--surface-secondary)] border border-[var(--border)] rounded-lg space-y-2">
+        <p className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider">
+          Password Requirements
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+          {requirements.map((req) => {
+            const isSatisfied = req.check(password);
+            return (
               <div
-                className={`flex items-center justify-center w-4 h-4 rounded-full border transition-all ${isSatisfied
-                  ? 'bg-green-500/20 border-green-500 text-green-500'
-                  : 'bg-transparent border-[var(--border)] text-transparent'
+                key={req.id}
+                className="flex items-center gap-2 text-xs transition-all duration-200"
+              >
+                <div
+                  className={`flex items-center justify-center w-4 h-4 rounded-full border transition-all ${
+                    isSatisfied
+                      ? 'bg-green-500/20 border-green-500 text-green-500'
+                      : 'bg-transparent border-[var(--border)] text-transparent'
                   }`}
-              >
-                <Check className="w-3.5 h-3.5" />
+                >
+                  <Check className="w-3.5 h-3.5" />
+                </div>
+                <span
+                  className={
+                    isSatisfied ? 'text-[var(--foreground)] font-medium' : 'text-[var(--muted)]'
+                  }
+                >
+                  {req.label}
+                </span>
               </div>
-              <span
-                className={
-                  isSatisfied
-                    ? 'text-[var(--foreground)] font-medium'
-                    : 'text-[var(--muted)]'
-                }
-              >
-                {req.label}
-              </span>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  },
+);
 
 PasswordChecklist.displayName = 'PasswordChecklist';

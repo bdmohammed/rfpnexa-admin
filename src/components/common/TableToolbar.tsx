@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
-import type { ChangeEvent } from "react";
-import SearchInput from "./SearchInput";
-import Select from "./Select";
-import TableAction from "./TableAction";
+import SearchInput from './SearchInput';
+import Select from './Select';
+import TableAction from './TableAction';
+
+import type { ChangeEvent } from 'react';
 
 export interface TableToolbarProps {
   search: string;
@@ -32,11 +33,7 @@ export default function TableToolbar({
       </div>
 
       <div className="flex flex-wrap items-center gap-2 lg:flex-nowrap lg:justify-end">
-        <SearchInput
-          placeholder={placeholder}
-          value={search}
-          onChange={handleSearch}
-        />
+        <SearchInput placeholder={placeholder} value={search} onChange={handleSearch} />
 
         <Select>
           <option>Newest</option>

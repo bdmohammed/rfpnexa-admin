@@ -17,7 +17,8 @@ export interface Notification {
   title: string;
   message: string;
   category: string;
-  severity: 'critical' | 'high' | 'medium' | 'low' | 'info' | 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+  severity:
+    'critical' | 'high' | 'medium' | 'low' | 'info' | 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
   entityType?: string | null;
   entityId?: string | null;
   actionUrl?: string | null;
