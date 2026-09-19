@@ -10,7 +10,7 @@ import type {
   CreateCountryChangeRequestInput,
   DependencyMatrixQueryInput,
   ReviewChangeRequestInput,
-  StateQuery,
+  // StateQuery,
   UpdateCountryBodyDto,
   UpdateStateBodyDto,
 } from '../types';
@@ -19,11 +19,11 @@ import { AppError, ERROR_CODES } from '@/lib/errors';
 
 // ─── Query Hooks ─────────────────────────────────────────────────────────────
 
-export function useStates(query?: StateQuery) {
+export function useStates(id: string, isActive?: boolean) {
   return useQuery({
-    queryKey: lookupQueryKeys.stateList(query),
+    queryKey: lookupQueryKeys.stateList(isActive !== undefined ? [id, isActive] : [id]),
     queryFn: async () => {
-      const { data } = await countriesApi.getStates(query);
+      const { data } = await countriesApi.getStates(id, isActive);
 
       if (!data.success) {
         throw new AppError(data.message, 400, data.error as ErrorCode);
@@ -34,11 +34,12 @@ export function useStates(query?: StateQuery) {
   });
 }
 
-export function useCountries() {
+export function useCountries(isActive?: boolean) {
   return useQuery({
-    queryKey: lookupQueryKeys.countries(),
+    queryKey: lookupQueryKeys.countries(isActive),
+
     queryFn: async () => {
-      const { data, status: statusCode } = await countriesApi.getCountries();
+      const { data, status: statusCode } = await countriesApi.getCountries(isActive);
 
       if (data.success === false) {
         throw new AppError(
@@ -48,7 +49,7 @@ export function useCountries() {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
   });
 }
@@ -67,7 +68,7 @@ export function useCountriesHierarchy() {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
   });
 }
@@ -105,7 +106,7 @@ export function useEligibleReviewers() {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
   });
 }
@@ -144,7 +145,7 @@ export function useReviewsQueue(query?: ChangeRequestQueryInput) {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
   });
 }
@@ -183,7 +184,7 @@ export function useRequestTimeline(requestId: string) {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
     enabled: !!requestId,
   });
@@ -203,7 +204,7 @@ export function useLocationTimeline(countryId: string, stateId?: string) {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
     enabled: !!countryId,
   });
@@ -352,6 +353,50 @@ export function useUpdateCountry() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: lookupQueryKeys.countries() });
+      queryClient.invalidateQueries({ queryKey: lookupQueryKeys.hierarchy() });
+    },
+  });
+}
+
+export function useUpdateCountryStatus() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      countryId,
+      input,
+    }: {
+      countryId: string;
+      input: UpdateCountryBodyDto;
+    }) => {
+      const { data } = await countriesApi.updateCountryStatus(countryId, input);
+
+      if (!data.success) {
+        throw new AppError(data.message, 400, data.error as ErrorCode);
+      }
+
+      return data.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: lookupQueryKeys.hierarchy() });
+    },
+  });
+}
+
+export function useUpdateStateStatus() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ stateId, input }: { stateId: string; input: UpdateStateBodyDto }) => {
+      const { data } = await countriesApi.updateStateStatus(stateId, input);
+
+      if (!data.success) {
+        throw new AppError(data.message, 400, data.error as ErrorCode);
+      }
+
+      return data.data;
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: lookupQueryKeys.hierarchy() });
     },
   });

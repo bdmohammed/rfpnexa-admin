@@ -1,14 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-export interface CountryItem {
-  countryId: string | number;
-  countryName: string;
-  countryCode: string;
-}
+import type { ListDistinctCountries } from '@/types';
 
 export interface UseCountryDropdownProps {
   value: string;
-  countries: CountryItem[] | undefined;
+  countries: ListDistinctCountries[] | undefined;
   onChange: (val: string) => void;
   onBlur: () => void;
 }
@@ -37,18 +33,18 @@ export function useCountryDropdown({
   // Set default selection to the first country ID if no value is provided
   useEffect(() => {
     if (!value && countries && countries.length > 0) {
-      onChange(String(countries[0]!.countryId));
+      onChange(String(countries[0]!.id));
     }
   }, [value, countries, onChange]);
 
   const selectedCountry = useMemo(() => {
     if (!countries || !value) return undefined;
-    return countries.find((c) => String(c.countryId) === String(value));
+    return countries.find((c) => String(c.id) === String(value));
   }, [countries, value]);
 
   const filteredCountries = useMemo(() => {
     if (!countries) return [];
-    return countries.filter((c) => c.countryName.toLowerCase().includes(searchTerm.toLowerCase()));
+    return countries.filter((c) => c.name.toLowerCase().includes(searchTerm.toLowerCase()));
   }, [countries, searchTerm]);
 
   const handleSelect = (countryId: string | number) => {

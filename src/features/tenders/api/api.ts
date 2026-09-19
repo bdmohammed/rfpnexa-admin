@@ -4,6 +4,7 @@ import type {
   CreateAmendmentDto,
   CreateClarificationDto,
   CreateQuestionDto,
+  // CreateTender,
   CreateTenderDto,
   RegisterDocumentDto,
   SubmitEvaluationDto,
@@ -32,6 +33,18 @@ export const tenderApi = {
     return apiClient.get<ApiResponse<Tender[]>>('/tenders', {
       params: query,
     });
+  },
+
+  getTenderById(id: string) {
+    return apiClient.get<ApiResponse<Tender[]>>(`/tenders/${id}`);
+  },
+
+  createTender(body: FormData) {
+    return apiClient.post<ApiResponse<any>>('/tenders', body);
+  },
+
+  updateTender(id: string, body: FormData) {
+    return apiClient.put<ApiResponse<Tender[]>>(`/tenders/${id}`, body);
   },
 
   getBySlug(slug: string) {

@@ -14,6 +14,10 @@ import type { ApiResponse, Category } from '@/types';
 import { apiClient } from '@/lib/http';
 
 export const categoryApi = {
+  getDistinctCategories() {
+    return apiClient.get<ApiResponse<{ categories: Pick<Category, 'id' | 'name'>[]; }>>('/categories/categories');
+  },
+
   getCategories(query?: CategoryQuery) {
     return apiClient.get<ApiResponse<{ categories: Category[]; total: number }>>('/categories', {
       params: query,

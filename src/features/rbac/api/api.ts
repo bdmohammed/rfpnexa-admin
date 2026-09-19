@@ -26,7 +26,7 @@ export const rbacApi = {
   createRole(data: CreateRoleDto) {
     return apiClient.post<ApiResponse<Role>>('/rbac/roles', {
       name: data.name,
-      description: data.description || null,
+      description: data.description ?? null,
       permissionKeys: data.permissions,
     });
   },
@@ -34,9 +34,9 @@ export const rbacApi = {
   updateRole(id: string, data: UpdateRoleDto) {
     return apiClient.put<ApiResponse<Role>>(`/rbac/roles/${id}`, {
       name: data.name,
-      description: data.description || null,
+      description: data.description ?? null,
       permissionKeys: data.permissions,
-      isActive: true,
+      status: data.status,
     });
   },
 

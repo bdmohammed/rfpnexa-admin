@@ -1,23 +1,25 @@
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { type CountryItem, useCountryDropdown } from '../useCountryDropdown';
+import { useCountryDropdown } from '../useCountryDropdown';
 
-const countries: CountryItem[] = [
+import type { ListDistinctCountries } from '@/types';
+
+const countries: ListDistinctCountries[] = [
   {
-    countryId: '1',
-    countryName: 'India',
-    countryCode: 'IN',
+    id: '1',
+    name: 'India',
+    code: 'IN',
   },
   {
-    countryId: '2',
-    countryName: 'United States',
-    countryCode: 'US',
+    id: '2',
+    name: 'United States',
+    code: 'US',
   },
   {
-    countryId: '3',
-    countryName: 'Canada',
-    countryCode: 'CA',
+    id: '3',
+    name: 'Canada',
+    code: 'CA',
   },
 ];
 

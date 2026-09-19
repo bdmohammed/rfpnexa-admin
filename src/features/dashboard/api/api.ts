@@ -1,60 +1,60 @@
-import type {
-  CriticalAlerts,
-  DashboardConfig,
-  PatchLayoutInput,
-  QuickActionItem,
-  RecentActivityItem,
-  RevenueStats,
-  ReviewQueueStats,
-  SystemHealth,
-  TenderStats,
-  UsersStats,
-} from '../types';
-import type { ApiResponse } from '@/types';
-import { apiClient } from '@/lib/http';
+// import type {
+//   CriticalAlerts,
+//   DashboardConfig,
+//   PatchLayoutInput,
+//   QuickActionItem,
+//   RecentActivityItem,
+//   RevenueStats,
+//   ReviewQueueStats,
+//   SystemHealth,
+//   TenderStats,
+//   UsersStats,
+// } from '../types';
+// import type { ApiResponse } from '@/types';
+// import { apiClient } from '@/lib/http';
 
-export const dashboardApi = {
-  getConfig() {
-    return apiClient.get<ApiResponse<DashboardConfig>>('/dashboard/config');
-  },
+// export const dashboardApi = {
+//   getConfig() {
+//     return apiClient.get<ApiResponse<DashboardConfig>>('/dashboard/config');
+//   },
 
-  getTenderStats() {
-    return apiClient.get<ApiResponse<TenderStats>>('/dashboard/tenders');
-  },
+//   getTenderStats() {
+//     return apiClient.get<ApiResponse<TenderStats>>('/dashboard/tenders');
+//   },
 
-  getRevenueStats() {
-    return apiClient.get<ApiResponse<RevenueStats>>('/dashboard/revenue');
-  },
+//   getRevenueStats() {
+//     return apiClient.get<ApiResponse<RevenueStats>>('/dashboard/revenue');
+//   },
 
-  getUsersStats() {
-    return apiClient.get<ApiResponse<UsersStats>>('/dashboard/users');
-  },
+//   getUsersStats() {
+//     return apiClient.get<ApiResponse<UsersStats>>('/dashboard/users');
+//   },
 
-  getReviewQueue() {
-    return apiClient.get<ApiResponse<ReviewQueueStats>>('/dashboard/review-queue');
-  },
+//   getReviewQueue() {
+//     return apiClient.get<ApiResponse<ReviewQueueStats>>('/dashboard/review-queue');
+//   },
 
-  getCriticalAlerts() {
-    return apiClient.get<ApiResponse<CriticalAlerts[]>>('/dashboard/alerts');
-  },
+//   getCriticalAlerts() {
+//     return apiClient.get<ApiResponse<CriticalAlerts[]>>('/dashboard/alerts');
+//   },
 
-  getRecentActivity() {
-    return apiClient.get<ApiResponse<RecentActivityItem[]>>('/dashboard/recent-activity');
-  },
+//   getRecentActivity() {
+//     return apiClient.get<ApiResponse<RecentActivityItem[]>>('/dashboard/recent-activity');
+//   },
 
-  getSystemHealth() {
-    return apiClient.get<ApiResponse<SystemHealth>>('/dashboard/system-health');
-  },
+//   getSystemHealth() {
+//     return apiClient.get<ApiResponse<SystemHealth>>('/dashboard/system-health');
+//   },
 
-  getQuickActionsList() {
-    return apiClient.get<ApiResponse<QuickActionItem[]>>('/dashboard/quick-actions');
-  },
+//   getQuickActionsList() {
+//     return apiClient.get<ApiResponse<QuickActionItem[]>>('/dashboard/quick-actions');
+//   },
 
-  updateLayout(input: PatchLayoutInput) {
-    return apiClient.patch<ApiResponse<PatchLayoutInput>>('/dashboard/layout', input);
-  },
+//   updateLayout(input: PatchLayoutInput) {
+//     return apiClient.patch<ApiResponse<PatchLayoutInput>>('/dashboard/layout', input);
+//   },
 
-  resetLayout() {
-    return apiClient.post<ApiResponse<DashboardConfig>>('/dashboard/layout/reset');
-  },
-};
+//   resetLayout() {
+//     return apiClient.post<ApiResponse<DashboardConfig>>('/dashboard/layout/reset');
+//   },
+// };

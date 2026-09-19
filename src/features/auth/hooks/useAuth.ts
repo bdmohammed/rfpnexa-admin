@@ -24,6 +24,7 @@ export function useAuth() {
   const resendVerification = useResendVerification();
 
   const { isAuthenticated, isInitializing, setAuthenticated } = useAuthStore();
+  console.log(me.data);
 
   return useMemo(
     () => ({

@@ -4,9 +4,9 @@ export const lookupQueryKeys = {
   all: ['lookups'] as const,
 
   states: () => [...lookupQueryKeys.all, 'states'] as const,
-  stateList: (query?: unknown) => [...lookupQueryKeys.states(), query] as const,
+  stateList: (query?: unknown) => [...lookupQueryKeys.states(), query ?? []] as const,
 
-  countries: () => [...lookupQueryKeys.all, 'countries'] as const,
+  countries: (query?: unknown) => [...lookupQueryKeys.all, query ?? [], 'countries'] as const,
 
   hierarchy: () => [...lookupQueryKeys.all, 'hierarchy'] as const,
   stats: () => [...lookupQueryKeys.all, 'stats'] as const,

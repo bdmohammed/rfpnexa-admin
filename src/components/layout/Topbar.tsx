@@ -6,8 +6,7 @@ import { Menu, Moon, Sun } from 'lucide-react';
 
 import Avatar from '../common/Avatar';
 
-import NotificationDropdown from './NotificationDropdown';
-
+// import NotificationDropdown from './NotificationDropdown';
 import { navigation, systemNavigation } from '@/constants/navigation';
 import { useCurrentUser } from '@/features/auth/api/queries';
 import { useAuthStore } from '@/features/auth/store/store';
@@ -18,12 +17,12 @@ export default function Topbar() {
 
   const { data: currentUserData } = useCurrentUser();
   const storeUser = useAuthStore((state) => state.user);
-  const user = currentUserData || storeUser;
+  const user = currentUserData ?? storeUser;
 
-  const userName = user?.name || 'Admin';
+  const userName = user?.name ?? 'Admin';
 
   const userRole = (() => {
-    const rawRoles = user?.roles || (user as any)?.role;
+    const rawRoles = user?.roles ?? (user as any)?.role;
     if (Array.isArray(rawRoles) && rawRoles.length > 0) {
       return rawRoles
         .map((r) => {
@@ -50,7 +49,7 @@ export default function Topbar() {
 
   const currentNav = [...navigation, ...systemNavigation].find((item) => item.href === pathname);
 
-  const title = currentNav?.headerTitle || currentNav?.title || 'Dashboard';
+  const title = currentNav?.headerTitle ?? currentNav?.title ?? 'Dashboard';
   const subtitle = currentNav?.subtitle;
 
   const toggleSidebar = useSidebarStore((state) => state.toggle);
@@ -98,7 +97,7 @@ export default function Topbar() {
             {mounted && theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
-          <NotificationDropdown />
+          {/* <NotificationDropdown /> */}
 
           <div className="flex items-center gap-2 rounded-xl border border-border bg-surface p-1 py-1.5 pl-1.5 pr-2 sm:gap-3 sm:p-2 sm:pr-3">
             <Avatar name={userName} size="sm" />

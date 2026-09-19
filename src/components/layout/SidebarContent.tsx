@@ -56,41 +56,41 @@ export default function SidebarContent({ onNavigate }: SidebarContentProps) {
 
   const filteredNavigation = navigation
     .map((item) => {
-      if (item.children && item.children.length > 0) {
-        return {
-          ...item,
-          children: item.children.filter(
-            (child) => !child.requiredPermission || hasPermission(child.requiredPermission),
-          ),
-        };
-      }
+      // if (item.children && item.children.length > 0) {
+      //   return {
+      //     ...item,
+      //     children: item.children.filter(
+      //       (child) => !child.requiredPermission || hasPermission(child.requiredPermission),
+      //     ),
+      //   };
+      // }
       return item;
     })
     .filter((item) => {
-      if (item.children) {
-        return item.children.length > 0;
-      }
+      // if (item.children) {
+      //   return item.children.length > 0;
+      // }
       return !item.requiredPermission || hasPermission(item.requiredPermission);
     });
 
   const filteredSystemNavigation = systemNavigation
     .map((item) => {
-      if (item.children && item.children.length > 0) {
-        return {
-          ...item,
-          children: item.children.filter(
-            (child) => !child.requiredPermission || hasPermission(child.requiredPermission),
-          ),
-        };
-      }
+      // if (item.children && item.children.length > 0) {
+      //   return {
+      //     ...item,
+      //     children: item.children.filter(
+      //       (child) => !child.requiredPermission || hasPermission(child.requiredPermission),
+      //     ),
+      //   };
+      // }
       return item;
     })
-    .filter((item) => {
-      if (item.children) {
-        return item.children.length > 0;
-      }
-      return !item.requiredPermission || hasPermission(item.requiredPermission);
-    });
+    // .filter((item) => {
+    //   // if (item.children) {
+    //   //   return item.children.length > 0;
+    //   // }
+    //   // return !item.requiredPermission || hasPermission(item.requiredPermission);
+    // });
 
   return (
     <div className="flex h-full flex-col">
@@ -142,7 +142,7 @@ export default function SidebarContent({ onNavigate }: SidebarContentProps) {
             <nav className="space-y-2">
               {filteredSystemNavigation.map((item) => (
                 <SidebarItem
-                  key={item.href}
+                  key={item}
                   item={item}
                   {...(onNavigate ? { onClick: onNavigate } : {})}
                 />

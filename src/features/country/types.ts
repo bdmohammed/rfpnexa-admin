@@ -81,12 +81,17 @@ export interface OperationalStats {
   totalCountries: number;
   activeCountries: number;
   disabledCountries: number;
+
   totalStates: number;
   activeStates: number;
   disabledStates: number;
+
+  openChangeRequests: number;
   pendingRequests: number;
   approvedRequests: number;
   rejectedRequests: number;
+
+  myPendingAssignments: number;
 }
 
 export interface DependencyMatrix {
@@ -147,8 +152,9 @@ export interface TicketItem {
 
 export interface CountryHierarchyNode {
   id: string;
-  name: string;
   code: string;
+  name: string;
+  slug: string;
   type: 'COUNTRY' | 'STATE';
   isActive: boolean;
   version: number;
@@ -165,7 +171,7 @@ export interface CountryHierarchyNode {
   } | null;
   activeRequestId?: string | null;
   activeRequestNumber?: string | null;
-  children?: CountryHierarchyNode[];
+  states?: CountryHierarchyNode[];
 }
 
 export interface ActivityItem {

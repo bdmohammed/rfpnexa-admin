@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+// import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
@@ -149,12 +149,12 @@ export function LoginForm() {
           <span className="text-xs text-red-500 mt-1 block">{errors.password.message}</span>
         )}
         <div className="flex justify-end">
-          <Link
+          {/* <Link
             href="/forgot-password"
             className="text-xs text-[#003EC7] hover:underline block mt-2"
           >
             Forgot Password?
-          </Link>
+          </Link> */}
         </div>
       </div>
 

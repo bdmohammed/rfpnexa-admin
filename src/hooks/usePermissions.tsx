@@ -14,15 +14,15 @@ export function usePermissions() {
   const isSuperAdmin = roles.includes('super-admin') ?? false;
 
   const hasPermission = (permission: string) => {
-    return isSuperAdmin ?? permissions.includes(permission);
+    return isSuperAdmin || permissions.includes(permission);
   };
 
   const hasAnyPermission = (keys: string[]) => {
-    return isSuperAdmin ?? keys.some((k) => permissions.includes(k));
+    return isSuperAdmin || keys.some((k) => permissions.includes(k));
   };
 
   const hasAllPermissions = (keys: string[]) => {
-    return isSuperAdmin ?? keys.every((k) => permissions.includes(k));
+    return isSuperAdmin || keys.every((k) => permissions.includes(k));
   };
 
   return {

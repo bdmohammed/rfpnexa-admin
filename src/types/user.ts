@@ -15,15 +15,13 @@ export enum AccountType {
 
 export interface User {
   id: string;
-  name: string;
-  email: string;
-  companyName: string | null;
-  country: string | null;
-  accountType: AccountType;
-  status: UserStatus;
-  adminRole: string;
-  emailVerified: boolean;
-  isBlocked: boolean;
+  accountType: string;
+  companyName: string;
+  countryId: number;
   createdAt: string;
+  email: string;
+  name: string;
+  permissions: string[];
+  roles: string[];
   updatedAt: string;
 }

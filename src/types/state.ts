@@ -9,3 +9,9 @@ export interface State {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ListDistinctCountries {
+  id: string;
+  name: string;
+  code: string;
+}

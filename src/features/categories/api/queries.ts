@@ -32,6 +32,22 @@ export function useCategories(query?: CategoryQuery) {
   });
 }
 
+export function useDistinctCategories() {
+  return useQuery({
+    queryKey: categoryQueryKeys.list(),
+
+    queryFn: async () => {
+      const { data } = await categoryApi.getDistinctCategories();
+
+      if (!data.success) {
+        throw new AppError(data.message, 400, data.error as ErrorCode);
+      }
+
+      return data.data;
+    },
+  });
+}
+
 export function useCategoryStats() {
   return useQuery({
     queryKey: categoryQueryKeys.stats(),
@@ -57,7 +73,7 @@ export function useCategoryHistory(id: string) {
         throw new AppError(data.message, 400, data.error as ErrorCode);
       }
 
-      return data.data ?? [];
+      return data.data;
     },
     enabled: !!id,
   });

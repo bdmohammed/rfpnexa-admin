@@ -9,6 +9,7 @@ import type {
   CreateAmendmentDto,
   CreateClarificationDto,
   CreateQuestionDto,
+  // CreateTender,
   CreateTenderDto,
   RegisterDocumentDto,
   SubmitEvaluationDto,
@@ -375,3 +376,67 @@ export function useCreateTemplate() {
     },
   });
 }
+
+
+export function useCreateTender() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (body: FormData) => {
+      const { data } = await tenderApi.createTender(body);
+
+      if (!data.success) {
+        throw new AppError(
+          data.message,
+          400,
+          data.error as ErrorCode,
+        );
+      }
+
+      return data.data;
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: tenderQueryKeys.all,
+      });
+    },
+  });
+}
+
+export function useUpdateTender() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: FormData;
+    }) => {
+      const response = await tenderApi.updateTender(id, data);
+
+      if (!response.data.success) {
+        throw new AppError(
+          response.data.message,
+          400,
+          response.data.error as ErrorCode,
+        );
+      }
+
+      return response.data.data;
+    },
+
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: tenderQueryKeys.all,
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: tenderQueryKeys.detail(variables.id),
+      });
+    },
+  });
+}
+

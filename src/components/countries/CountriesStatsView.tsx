@@ -1,95 +1,144 @@
-'use client';
+// 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { CheckCircle2, Clock, FileCheck2, Globe, XCircle } from 'lucide-react';
+// import {
+//   CheckCircle2,
+//   Clock,
+//  FileCheck2,
+//   Globe,
+//   MapPinned,
+//   XCircle,
+// } from 'lucide-react';
 
-import { apiClient } from '@/lib/http';
+// import type { LucideIcon } from 'lucide-react';
+// import { useOperationalStats } from '@/features/country';
 
-interface StatsProps {
-  onOpenCreateModal: () => void;
-  onSelectTab: (tab: 'stats' | 'list' | 'reviews') => void;
-}
+// interface StatCardProps {
+//   title: string;
+//   value?: number | undefined;
+//   loading: boolean;
+//   icon: LucideIcon;
+//   color: string;
+// }
 
-export const CountriesStatsView: React.FC<StatsProps> = ({}) => {
-  const [stats, setStats] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+// function StatCard({ title, value, loading, icon: Icon, color }: StatCardProps) {
+//   return (
+//     <div className="rounded-2xl border border-border bg-surface p-6 shadow-xs transition-shadow hover:shadow-md">
+//       <div className="flex items-center justify-between">
+//         <span className="text-xs font-semibold text-text-light">{title}</span>
 
-  useEffect(() => {
-    fetchStats();
-  }, []);
+//         <div className={`rounded-xl p-2 ${color}`}>
+//           <Icon size={16} />
+//         </div>
+//       </div>
 
-  const fetchStats = async () => {
-    try {
-      const res = await apiClient.get<any>('/countries/stats');
-      if (res.data?.success) {
-        setStats(res.data.data);
-      }
-    } catch (err) {
-      console.error('Failed to load stats', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+//       <div className="mt-3">
+//         {loading ? (
+//           <div className="h-8 w-16 animate-pulse rounded-md bg-border" />
+//         ) : (
+//           <h3 className="text-3xl font-bold tracking-tight text-text">
+//             {value ?? 0}
+//           </h3>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
 
-  return (
-    <div className="space-y-6">
-      {/* Modern Stats Cards */}
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {[
-          {
-            title: 'Total Countries',
-            val: stats?.totalCountries,
-            icon: Globe,
-            col: 'text-indigo-500 bg-indigo-50 dark:bg-indigo-950/20',
-          },
-          {
-            title: 'Active Operational',
-            val: stats?.activeCountries,
-            icon: CheckCircle2,
-            col: 'text-emerald-500 bg-emerald-50 dark:bg-emerald-950/20',
-          },
-          {
-            title: 'Disabled / Inactive',
-            val: stats?.disabledCountries,
-            icon: XCircle,
-            col: 'text-rose-500 bg-rose-50 dark:bg-rose-950/20',
-          },
-          {
-            title: 'Open Review Tickets',
-            val: stats?.openReviews,
-            icon: FileCheck2,
-            col: 'text-amber-500 bg-amber-50 dark:bg-amber-950/20',
-          },
-          {
-            title: 'Assigned to Me',
-            val: stats?.pendingMine,
-            icon: Clock,
-            col: 'text-purple-500 bg-purple-50 dark:bg-purple-950/20',
-          },
-        ].map((card, i) => {
-          const Icon = card.icon;
-          return (
-            <div
-              key={i}
-              className="rounded-2xl border border-border bg-surface p-6 shadow-xs hover:shadow-md transition-all duration-300"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-text-light">{card.title}</span>
-                <div className={`p-2 rounded-xl ${card.col}`}>
-                  <Icon size={16} />
-                </div>
-              </div>
-              <div className="mt-3">
-                {loading ? (
-                  <div className="h-8 w-16 bg-border animate-pulse rounded-md" />
-                ) : (
-                  <h3 className="text-3xl font-bold tracking-tight text-text">{card.val ?? 0}</h3>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
+// export const CountriesStatsView = () => {
+//   const { data: stats, isLoading } = useOperationalStats();
+
+//   const cards = [
+//     {
+//       key: 'countries-total',
+//       title: 'Total Countries',
+//       value: stats?.totalCountries,
+//       icon: Globe,
+//       color: 'bg-indigo-50 text-indigo-500 dark:bg-indigo-950/20',
+//     },
+//     {
+//       key: 'countries-active',
+//       title: 'Active Countries',
+//       value: stats?.activeCountries,
+//       icon: CheckCircle2,
+//       color: 'bg-emerald-50 text-emerald-500 dark:bg-emerald-950/20',
+//     },
+//     {
+//       key: 'countries-disabled',
+//       title: 'Disabled Countries',
+//       value: stats?.disabledCountries,
+//       icon: XCircle,
+//       color: 'bg-rose-50 text-rose-500 dark:bg-rose-950/20',
+//     },
+//     {
+//       key: 'states-total',
+//       title: 'Total States',
+//       value: stats?.totalStates,
+//       icon: MapPinned,
+//       color: 'bg-sky-50 text-sky-500 dark:bg-sky-950/20',
+//     },
+//     {
+//       key: 'states-active',
+//       title: 'Active States',
+//       value: stats?.activeStates,
+//       icon: CheckCircle2,
+//       color: 'bg-emerald-50 text-emerald-500 dark:bg-emerald-950/20',
+//     },
+//     {
+//       key: 'states-disabled',
+//       title: 'Disabled States',
+//       value: stats?.disabledStates,
+//       icon: XCircle,
+//       color: 'bg-rose-50 text-rose-500 dark:bg-rose-950/20',
+//     },
+//     {
+//       key: 'requests-open',
+//       title: 'Open Requests',
+//       value: stats?.openChangeRequests,
+//       icon: FileCheck2,
+//       color: 'bg-amber-50 text-amber-500 dark:bg-amber-950/20',
+//     },
+//     {
+//       key: 'requests-pending',
+//       title: 'Pending Requests',
+//       value: stats?.pendingRequests,
+//       icon: Clock,
+//       color: 'bg-orange-50 text-orange-500 dark:bg-orange-950/20',
+//     },
+//     {
+//       key: 'requests-approved',
+//       title: 'Approved Requests',
+//       value: stats?.approvedRequests,
+//       icon: CheckCircle2,
+//       color: 'bg-green-50 text-green-500 dark:bg-green-950/20',
+//     },
+//     {
+//       key: 'requests-rejected',
+//       title: 'Rejected Requests',
+//       value: stats?.rejectedRequests,
+//       icon: XCircle,
+//       color: 'bg-red-50 text-red-500 dark:bg-red-950/20',
+//     },
+//     {
+//       key: 'assigned',
+//       title: 'My Pending Reviews',
+//       value: stats?.myPendingAssignments,
+//       icon: Clock,
+//       color: 'bg-purple-50 text-purple-500 dark:bg-purple-950/20',
+//     },
+//   ];
+
+//   return (
+//     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+//       {cards.map((card) => (
+//         <StatCard
+//           key={card.key}
+//           title={card.title}
+//           value={card.value}
+//           loading={isLoading}
+//           icon={card.icon}
+//           color={card.color}
+//         />
+//       ))}
+//     </div>
+//   );
+// };

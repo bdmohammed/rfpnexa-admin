@@ -96,7 +96,7 @@ export function useTenderHistory(id: string) {
       if (!data.success) {
         throw new AppError(data.message, 400, data.error as ErrorCode);
       }
-      return data.data ?? [];
+      return data.data;
     },
     enabled: !!id,
   });

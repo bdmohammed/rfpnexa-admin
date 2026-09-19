@@ -130,7 +130,7 @@ export function useFeatureCatalog() {
         throw new AppError(data.message, 400, data.error as ErrorCode);
       }
 
-      return data.data ?? [];
+      return data.data;
     },
   });
 }
@@ -145,7 +145,7 @@ export function useCouponsList() {
         throw new AppError(data.message, 400, data.error as ErrorCode);
       }
 
-      return data.data ?? [];
+      return data.data;
     },
   });
 }
@@ -176,7 +176,7 @@ export function useAllPlansAdmin() {
         throw new AppError(data.message, 400, data.error as ErrorCode);
       }
 
-      return data.data ?? [];
+      return data.data;
     },
   });
 }

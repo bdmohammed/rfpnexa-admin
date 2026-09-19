@@ -7,17 +7,19 @@ import { useCountryDropdown } from './useCountryDropdown';
 
 import QueryBoundary from '@/components/query/QueryBoundary';
 import { useCountries } from '@/features/country/api/queries';
+import { ListDistinctCountries } from '@/types';
 
 export interface CountryDropdownProps {
+  isActive?: boolean;
   value: string;
   onChange: (val: string) => void;
   onBlur: () => void;
   error?: string | undefined;
 }
 
-export default function CountryDropdown({ value, onChange, onBlur, error }: CountryDropdownProps) {
-  const countriesQuery = useCountries();
-  const countries = countriesQuery.data;
+export default function CountryDropdown({ isActive, value, onChange, onBlur, error }: CountryDropdownProps) {
+  const countriesQuery = useCountries(isActive);
+  const countries = countriesQuery.data as unknown as ListDistinctCountries[];
 
   const {
     isOpen,
@@ -29,7 +31,7 @@ export default function CountryDropdown({ value, onChange, onBlur, error }: Coun
     filteredCountries,
     handleSelect,
   } = useCountryDropdown({ value, countries, onChange, onBlur });
-  const displayText = selectedCountry ? selectedCountry.countryName : 'Select Country';
+  const displayText = selectedCountry ? selectedCountry.name : 'Select Country';
 
   return (
     <div className="relative">
@@ -83,9 +85,9 @@ export default function CountryDropdown({ value, onChange, onBlur, error }: Coun
                 {filteredCountries.length > 0 ? (
                   filteredCountries.map((c) => (
                     <CountryOption
-                      key={c.countryId}
-                      countryId={c.countryId}
-                      countryName={c.countryName}
+                      key={c.id}
+                      countryId={c.id}
+                      countryName={c.name}
                       selectedId={value}
                       onClick={handleSelect}
                     />

@@ -28,7 +28,7 @@ export function useCurrentUser() {
         }
 
         return data.data;
-      } catch (err) {
+      } catch (err: unknown) {
         if (isGuestPage) {
           return null;
         }
@@ -86,7 +86,7 @@ export function useUserSessions() {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
   });
 }
@@ -108,7 +108,7 @@ export function useUserDevices() {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
   });
 }
@@ -130,7 +130,7 @@ export function useOwnerReview(query: { token: string }) {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
     enabled: !!query.token,
   });
@@ -243,7 +243,7 @@ export function useAdminUserSecurityLog(id: string) {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
     enabled: !!id,
   });
@@ -266,7 +266,7 @@ export function useAdminUserSessions(id: string) {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
     enabled: !!id,
   });
@@ -289,7 +289,7 @@ export function useAdminUserDevices(id: string) {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
     enabled: !!id,
   });
@@ -312,7 +312,7 @@ export function useAdminUserActivity(id: string) {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
     enabled: !!id,
   });
@@ -335,7 +335,7 @@ export function useAdminUserTimeline(id: string) {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
     enabled: !!id,
   });
@@ -358,7 +358,7 @@ export function useAdminUserAuditLog(id: string) {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
     enabled: !!id,
   });
@@ -404,7 +404,7 @@ export function useAdminUserNotes(id: string) {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
     enabled: !!id,
   });
@@ -427,7 +427,7 @@ export function useAdminUserRoles(id: string) {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
     enabled: !!id,
   });
@@ -450,7 +450,7 @@ export function useAdminUserPermissions(id: string) {
         );
       }
 
-      return data.data ?? [];
+      return data.data;
     },
     enabled: !!id,
   });

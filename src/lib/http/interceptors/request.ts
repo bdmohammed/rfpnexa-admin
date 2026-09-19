@@ -1,7 +1,12 @@
 import { InternalAxiosRequestConfig } from "axios";
 
 import { fetchCsrfToken, getCsrfToken } from "../csrf";
-import { CONTENT_TYPES, HTTP_HEADERS, HttpMethod, MUTATING_METHODS } from "../constants";
+import { 
+  // CONTENT_TYPES,
+  HTTP_HEADERS, 
+  HttpMethod, 
+  MUTATING_METHODS 
+} from "../constants";
 import { HttpRequestConfig } from "../types";
 
 /**
@@ -22,7 +27,7 @@ export async function requestInterceptor(
   /**
    * Default Content-Type
    */
-  config.headers.set(HTTP_HEADERS.CONTENT_TYPE, CONTENT_TYPES.JSON);
+  // config.headers.set(HTTP_HEADERS.CONTENT_TYPE, CONTENT_TYPES.JSON);
 
   /**
    * Attach CSRF Token for mutating requests.

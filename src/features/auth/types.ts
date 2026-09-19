@@ -71,6 +71,7 @@ export interface OAuthCallbackInput {
 }
 
 export interface ListUsersQuery {
+  accountType: string;
   page?: number;
   limit?: number;
   search?: string;

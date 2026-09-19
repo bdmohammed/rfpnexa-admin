@@ -184,3 +184,16 @@ export interface TenderReport {
   summary: string;
   data: any[];
 }
+
+export type CreateTender = {
+  title: string;
+  description?: string | null;
+  eligibility?: string | null;
+  workPerformance?: string | null;
+  proposalSubmission?: string | null;
+  deadline: Date;
+  categoryId: string;
+  stateId: number;
+  countryId: number;
+  documents: File[];
+};
